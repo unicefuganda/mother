@@ -90,91 +90,24 @@ def init_autoreg(sender, **kwargs):
 
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Welcome to the SMS based school data collection pilot.The information you provide is valuable to improving the quality of education in Uganda.",
+            message="Welcome message.",
             order=0,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=0,
             giveup_offset=60,
         ))
-        role_poll = Poll.objects.create(\
-            name='emis_role', \
-            user=user, type=Poll.TYPE_TEXT, \
-            question='To register,tell us your role? Teacher, Head Teacher, SMC, GEM, CCT, DEO,or District Official.Reply with one of the roles listed.', \
-            default_response=''
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=role_poll,
-            order=1,
-            rule=ScriptStep.RESEND_MOVEON,
-            num_tries=1,
-            start_offset=0,
-            retry_offset=86400,
-            giveup_offset=86400,
-        ))
         district_poll = Poll.objects.create(
             user=user, \
             type='district', \
-            name='emis_district',
+            name='mrs_district',
             question='What is the name of your district?', \
             default_response='', \
         )
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=district_poll,
-            order=2,
+            order=1,
             rule=ScriptStep.STRICT_MOVEON,
-            start_offset=0,
-            retry_offset=86400,
-            num_tries=1,
-            giveup_offset=86400,
-        ))
-        county_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_TEXT, \
-            name='emis_subcounty',
-            question='What is the name of your sub county?', \
-            default_response='', \
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=county_poll,
-            order=3,
-            rule=ScriptStep.RESEND_MOVEON,
-            start_offset=0,
-            retry_offset=86400,
-            num_tries=1,
-            giveup_offset=86400,
-        ))
-        school1_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_TEXT, \
-            name='emis_one_school',
-            question='What is the name of your school?', \
-            default_response='', \
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=school1_poll,
-            order=4,
-            rule=ScriptStep.RESEND_MOVEON,
-            start_offset=0,
-            retry_offset=86400,
-            num_tries=1,
-            giveup_offset=86400,
-        ))
-        schoolmany_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_TEXT, \
-            name='emis_many_school',
-            question='Name the schools you are resonsible for.Separate each school name with a comma, for example "St. Mary Secondary,Pader Primary"', \
-            default_response='', \
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=schoolmany_poll,
-            order=5,
-            rule=ScriptStep.RESEND_MOVEON,
             start_offset=0,
             retry_offset=86400,
             num_tries=1,
@@ -183,14 +116,14 @@ def init_autoreg(sender, **kwargs):
         name_poll = Poll.objects.create(
             user=user, \
             type=Poll.TYPE_TEXT, \
-            name='emis_name',
+            name='mrs_name',
             question='What is your name?', \
             default_response='', \
         )
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=name_poll,
-            order=6,
+            order=2,
             rule=ScriptStep.RESEND_MOVEON,
             num_tries=1,
             start_offset=60,
@@ -199,8 +132,8 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Welcome to the school monitoring pilot.The information you provide contributes to keeping children in school.",
-            order=7,
+            message="Congrats you're finished.",
+            order=3,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=60,
             giveup_offset=0,
