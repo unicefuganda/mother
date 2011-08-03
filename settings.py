@@ -166,3 +166,9 @@ if 'test' in sys.argv:
         DATABASES[db_name]['TEST_NAME'] = os.path.join(
             tempfile.gettempdir(),
             "%s.rapidsms.test.sqlite3" % db_name)
+
+
+try:
+    from localsettings import *
+except ImportError:
+    pass

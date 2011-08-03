@@ -1,4 +1,5 @@
 *.pyc
 .project
 .pydevproject
-
+localsettings.py
+.settings
