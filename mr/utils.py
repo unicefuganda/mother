@@ -83,8 +83,8 @@ def init_structures(sender, **kwargs):
 
 def init_autoreg(sender, **kwargs):
     script, created = Script.objects.get_or_create(
-            slug="emis_autoreg", defaults={
-            'name':"Education monitoring autoregistration script"})
+            slug="mrs_autoreg", defaults={
+            'name':"Mother reminder autoregistration script"})
     if created:
         user, created = User.objects.get_or_create(username="admin")
 
