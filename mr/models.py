@@ -75,4 +75,4 @@ def parse_timedelta(value):
                         if dl_distance(word, unit) <= 1:
                             return number * unit_amounts[key]
 
-Poll.register_poll_type('timedelta', 'Time Length', parse_timedelta, db_type=Attribute.TYPE_INT)
+Poll.register_poll_type('timedelt', 'Time Length', parse_timedelta, db_type=Attribute.TYPE_INT)

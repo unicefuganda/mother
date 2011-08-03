@@ -113,6 +113,23 @@ def init_autoreg(sender, **kwargs):
             num_tries=1,
             giveup_offset=86400,
         ))
+        menses_poll = Poll.objects.create(
+            user=user, \
+            type='timedelt', \
+            name='mrs_menses',
+            question='Last menses?', \
+            default_response='', \
+        )
+        script.steps.add(ScriptStep.objects.create(
+            script=script,
+            poll=menses_poll,
+            order=2,
+            rule=ScriptStep.STRICT_MOVEON,
+            start_offset=0,
+            retry_offset=86400,
+            num_tries=1,
+            giveup_offset=86400,
+        ))
         name_poll = Poll.objects.create(
             user=user, \
             type=Poll.TYPE_TEXT, \
@@ -123,7 +140,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=name_poll,
-            order=2,
+            order=3,
             rule=ScriptStep.RESEND_MOVEON,
             num_tries=1,
             start_offset=60,
@@ -132,8 +149,8 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Congrats you're finished.",
-            order=3,
+            message="Congrats you're done.",
+            order=4,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=60,
             giveup_offset=0,

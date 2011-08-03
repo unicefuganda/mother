@@ -6,6 +6,12 @@ from django.contrib import admin
 from rapidsms_httprouter.urls import urlpatterns as router_urls
 from healthmodels.urls import urlpatterns as healthmodels_urls
 from contact.urls import urlpatterns as contact_urls
+from generic.views import generic
+from generic.sorters import SimpleSorter
+from rapidsms_httprouter.models import Message
+from contact.forms import FreeSearchTextForm, DistictFilterMessageForm, ReplyTextForm
+from contact.views import view_message_history
+from django.contrib.auth.decorators import login_required
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -23,14 +29,24 @@ urlpatterns = patterns('',
     url('^accounts/login', 'rapidsms.views.login'),
     url('^accounts/logout', 'rapidsms.views.logout'),
     # RapidSMS contrib app URLs
-    (r'^httptester/', include('rapidsms.contrib.httptester.urls')),
-    (r'^locations/', include('rapidsms.contrib.locations.urls')),
-    (r'^messagelog/', include('rapidsms.contrib.messagelog.urls')),
-    (r'^messaging/', include('rapidsms.contrib.messaging.urls')),
-    (r'^scheduler/', include('rapidsms.contrib.scheduler.urls')),
-    #(r'^status160/', include('status160.urls')),
-    (r'^polls/', include('poll.urls')),
-) + router_urls + healthmodels_urls + contact_urls
+    url(r'^contact/messagelog/$', login_required(generic), {
+      'model':Message,
+      'filter_forms':[FreeSearchTextForm, DistictFilterMessageForm],
+      'action_forms':[ReplyTextForm],
+      'objects_per_page':25,
+      'partial_row':'contact/partials/message_row.html',
+      'base_template':'contact/messages_base.html',
+      'columns':[('Text', True, 'text', SimpleSorter()),
+                 ('Contact Information', True, 'connection__contact__name', SimpleSorter(),),
+                 ('Date', True, 'date', SimpleSorter(),),
+                 ('Type', True, 'application', SimpleSorter(),),
+                 ('Response', False, 'response', None,),
+                 ],
+      'sort_column':'date',
+      'sort_ascending':False,
+    }, name="contact-messagelog"),
+    url(r"^contact/(\d+)/message_history/$", view_message_history, name="message_history"),
+)
 
 if settings.DEBUG:
     urlpatterns += patterns('',

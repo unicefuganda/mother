@@ -135,6 +135,10 @@ class ModelTest(TestCase): #pragma: no cover
 
     def testChopKeyword(self):
         self.fake_incoming('mrs hi')
-        self.assertEquals(Message.objects.all()[0].text, ' hi')
+        self.assertEquals(Message.objects.all()[0].text, 'hi')
 
-
+    def testDumpIntoAutoReg(self):
+        self.fake_incoming('mrs join')
+        self.assertEquals(ScriptProgress.objects.count(), 1)
+        self.fake_incoming('mrs join')
+        self.assertEquals(ScriptProgress.objects.count(), 1)
