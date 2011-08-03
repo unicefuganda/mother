@@ -1,0 +1,15 @@
+[submodule "rapidsms"]
+	path = rapidsms
+	url = git://github.com/rapidsms/rapidsms
+[submodule "rapidsms-script"]
+	path = rapidsms-script
+	url = git://github.com/daveycrockett/rapidsms-script
+[submodule "rapidsms-polls"]
+	path = rapidsms-polls
+	url = git://github.com/daveycrockett/rapidsms-polls
+[submodule "healthmodels"]
+	path = healthmodels
+	url = git://github.com/daveycrockett/healthmodels
+[submodule "rapidsms-generic"]
+	path = rapidsms-generic
+	url = git://github.com/daveycrockett/rapidsms-generic
