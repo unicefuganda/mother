@@ -7,6 +7,7 @@
 # -------------------------------------------------------------------- #
 TIME_ZONE = "Africa/Kampala"
 
+SHORTCODE_PREFIX = 'mrs'
 # you should configure your database here before doing any real work.
 # see: http://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 SMS_APPS = [
+    "mr",
     "script",
     "poll",
 ]

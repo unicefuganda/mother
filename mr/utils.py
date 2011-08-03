@@ -86,8 +86,6 @@ def init_autoreg(sender, **kwargs):
             slug="emis_autoreg", defaults={
             'name':"Education monitoring autoregistration script"})
     if created:
-        if 'django.contrib.sites' in settings.INSTALLED_APPS:
-            script.sites.add(Site.objects.get_current())
         user, created = User.objects.get_or_create(username="admin")
 
         script.steps.add(ScriptStep.objects.create(
