@@ -96,6 +96,24 @@ def init_autoreg(sender, **kwargs):
             start_offset=0,
             giveup_offset=60,
         ))
+        own_poll = Poll.objects.create(
+            user=user, \
+            type=Poll.TYPE_TEXT, \
+            name='mrs_district',
+            question='Does the mother own this phone?', \
+            default_response='', \
+        )
+        own_poll.add_yesno_categories()
+        script.steps.add(ScriptStep.objects.create(
+            script=script,
+            poll=own_poll,
+            order=1,
+            rule=ScriptStep.STRICT_MOVEON,
+            start_offset=0,
+            retry_offset=86400,
+            num_tries=1,
+            giveup_offset=86400,
+        ))
         district_poll = Poll.objects.create(
             user=user, \
             type='district', \
@@ -106,7 +124,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=district_poll,
-            order=1,
+            order=2,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
             retry_offset=86400,
@@ -123,7 +141,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=menses_poll,
-            order=2,
+            order=3,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
             retry_offset=86400,
@@ -140,7 +158,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=name_poll,
-            order=3,
+            order=4,
             rule=ScriptStep.RESEND_MOVEON,
             num_tries=1,
             start_offset=60,
@@ -150,7 +168,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             message="Congrats you're done.",
-            order=4,
+            order=5,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=60,
             giveup_offset=0,

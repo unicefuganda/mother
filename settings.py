@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "rapidsms.contrib.locations",
     "rapidsms.contrib.locations.nested",
     "eav",
+    "mr",
     "healthmodels",
     "rapidsms_httprouter",
     "poll",
@@ -65,7 +66,8 @@ SMS_APPS = [
 ]
 
 RAPIDSMS_TABS = [
-    ('contact-messagelog', 'Messages')
+    ('contact-messagelog', 'Messages'),
+    ("mrs-contact", "Mothers"),
 ]
 
 

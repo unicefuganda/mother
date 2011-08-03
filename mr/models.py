@@ -3,7 +3,9 @@ from django.db.models.signals import post_syncdb
 from .utils import mr_autoreg, init_structures
 import datetime
 import re
-from poll.mobels import Poll
+from poll.models import Poll
+from django.core.exceptions import ValidationError
+from eav.models import Attribute
 
 post_syncdb.connect(init_structures, weak=False)
 script_progress_was_completed.connect(mr_autoreg, weak=False)
@@ -74,5 +76,6 @@ def parse_timedelta(value):
                     for word in words:
                         if dl_distance(word, unit) <= 1:
                             return number * unit_amounts[key]
+        # raise ValidationError
 
 Poll.register_poll_type('timedelt', 'Time Length', parse_timedelta, db_type=Attribute.TYPE_INT)
