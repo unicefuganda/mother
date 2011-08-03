@@ -13,3 +13,15 @@
 [submodule "rapidsms-generic"]
 	path = rapidsms-generic
 	url = git://github.com/daveycrockett/rapidsms-generic
+[submodule "rapidsms-contact"]
+	path = rapidsms-contact
+	url = git://github.com/mossplix/rapidsms-contact
+[submodule "eav"]
+	path = eav
+	url = git://github.com/daveycrockett/eav
+[submodule "rapidsms-httprouter"]
+	path = rapidsms-httprouter
+	url = git://github.com/daveycrockett/rapidsms-httprouter
+[submodule "rapidsms-ureport"]
+	path = rapidsms-ureport
+	url = git://github.com/daveycrockett/rapidsms-ureport
