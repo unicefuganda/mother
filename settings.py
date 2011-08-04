@@ -22,8 +22,14 @@ INSTALLED_BACKENDS = {
         "ENGINE": "rapidsms.backends.bucket",
     },
 }
+ROUTER_URL = {
+   "mrs": "http://asdf.switch1.yo.co.ug/ybs_p/task.php?ybsacctno=BLEEP&sysrid=5&method=acsendsms&type=1&ybs_autocreate_authorization=BLEEPBLEEP&nostore=0&origin=8282&sms_content=%(text)s&destinations=%(recipient)s&password=password",
+   "default": ""
+}
 
-ROUTER_URL = "http://switch1.yo.co.ug/ybs_p/task.php"
+YO_PRIMARY_URL = "http://smgw1.yo.co.ug:9100/sendsms"
+YO_SECONDARY_URL = "http://smgw2.yo.co.ug:9100/sendsms"
+
 # to help you get started quickly, many django/rapidsms apps are enabled
 # by default. you may wish to remove some and/or add your own.
 INSTALLED_APPS = [

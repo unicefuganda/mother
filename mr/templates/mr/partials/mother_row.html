@@ -1,6 +1,13 @@
-<td>{{ object.name }}</td>
-<td>{{ object.connection_set.0.identity }}</td>
+{% extends 'generic/partials/partial_row.html' %}
+{% block remaining_row_content %}
+<td><a href="/{{ object.pk }}/view">{{ object.name }}</a></td>
+<td>{% if object.default_connection.identity %}
+    <a href="/contact/{{ object.default_connection.pk }}/message_history">
+        {{ object.default_connection.identity }}
+    </a>
+{% endif %}</td>
 <td>{{ object.reporting_location.name }}</td>
 <td>{{ object.owns_phone }}</td>
 <td>{{ object.last_menses }}</td>
 <td>{{ object.anc_visits }}</td>
+{% endblock %}

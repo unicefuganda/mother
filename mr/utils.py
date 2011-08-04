@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
-from script.models import Script, ScriptStep
+from script.models import Script, ScriptStep, ScriptSession
 from script.utils.handling import find_best_response, find_closest_match
+from rapidsms.models import Contact
+from rapidsms.contrib.locations.models import Location
+import datetime
 import traceback
 
 
@@ -10,58 +13,38 @@ def mr_autoreg(**kwargs):
 
     connection = kwargs['connection']
     progress = kwargs['sender']
-    if not progress.script.slug == 'mr_autoreg':
+    if not progress.script.slug == 'mrs_autoreg':
         return
 
     session = ScriptSession.objects.filter(script=progress.script, connection=connection).order_by('-end_time')[0]
     script = progress.script
 
-    role_poll = script.steps.get(order=1).poll
-    district_poll = script.steps.get(order=2).poll
-    subcounty_poll = script.steps.get(order=3).poll
-    school_poll = script.steps.get(order=4).poll
-    schools_poll = script.steps.get(order=5).poll
-    name_poll = script.steps.get(order=6).poll
+    district_poll = script.steps.get(poll__name='mrs_district').poll
+    ownership_poll = script.steps.get(poll__name='mrs_ownership').poll
+    menses_poll = script.steps.get(poll__name='mrs_menses').poll
+    visits_poll = script.steps.get(poll__name='mrs_visits').poll
+    name_poll = script.steps.get(poll__name='mrs_name').poll
 
-    if not connection.contact:
-#            connection.contact = Contact.objects.create()
-            connection.contact = EmisReporter.objects.create()
-            connection.save
     contact = connection.contact
 
-    subcounty = find_best_response(session, subcounty_poll)
-    district = find_best_response(session, district_poll)
-
-    if subcounty:
-        subcounty = find_closest_match(subcounty, Location.objects.filter(type__name='sub_county'))
-
-    if subcounty:
-        contact.reporting_location = subcounty
-    elif district:
-        contact.reporting_location = district
-    else:
-        contact.reporting_location = Location.tree.root_nodes()[0]
+    contact.reporting_location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
 
     name = find_best_response(session, name_poll)
     if name:
         name = ' '.join([n.capitalize() for n in name.lower().split(' ')])
         contact.name = name[:100]
 
-    if not contact.name:
-        contact.name = 'Anonymous User'
-    contact.save()
+    resps = session.responses.filter(response__poll=ownership_poll, \
+                                     response__has_errors=False).order_by('-response__date')
+    if resps.count() and resps[0].response.categories.filter(category__name='no').count():
+        contact.owns_phone = False
 
-    reporting_school = None
-    school = find_best_response(session, school_poll)
-    if school:
-        if subcounty:
-            reporting_school = find_closest_match(school, School.objects.filter(location__name__in=[subcounty], \
-                                                                                location__type__name='sub_county'), True)
-        elif district:
-            reporting_school = find_closest_match(school, School.objects.filter(location__name__in=[district.name], \
-                                                                            location__type__name='district'), True)
-        else:
-            reporting_school = find_closest_match(school, School.objects.filter(location__name=Location.tree.root_nodes()[0].name))
+    last_menses = find_best_response(session, menses_poll)
+    if last_menses:
+        contact.last_menses = datetime.datetime.now() - datetime.timedelta(last_menses)
+
+    contact.anc_visits = find_best_response(session, visits_poll) or 0
+    contact.save()
 
 
 models_created = []
@@ -86,11 +69,14 @@ def init_autoreg(sender, **kwargs):
             slug="mrs_autoreg", defaults={
             'name':"Mother reminder autoregistration script"})
     if created:
+        if 'django.contrib.sites' in settings.INSTALLED_APPS:
+            from django.contrib.sites.models import Site
+            script.sites.add(Site.objects.get_current())
         user, created = User.objects.get_or_create(username="admin")
 
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Welcome message.",
+            message="Welcome to the demo of Mother Reminder. Please answer the questions in the following messages.",
             order=0,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=0,
@@ -99,7 +85,7 @@ def init_autoreg(sender, **kwargs):
         own_poll = Poll.objects.create(
             user=user, \
             type=Poll.TYPE_TEXT, \
-            name='mrs_district',
+            name='mrs_ownership',
             question='Does the mother own this phone?', \
             default_response='', \
         )
@@ -135,13 +121,30 @@ def init_autoreg(sender, **kwargs):
             user=user, \
             type='timedelt', \
             name='mrs_menses',
-            question='Last menses?', \
+            question='When was your last menses?', \
             default_response='', \
         )
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=menses_poll,
             order=3,
+            rule=ScriptStep.STRICT_MOVEON,
+            start_offset=0,
+            retry_offset=86400,
+            num_tries=1,
+            giveup_offset=86400,
+        ))
+        visits_poll = Poll.objects.create(
+            user=user, \
+            type=Poll.TYPE_NUMERIC, \
+            name='mrs_visits',
+            question='How many visits to your health provider have you made?', \
+            default_response='', \
+        )
+        script.steps.add(ScriptStep.objects.create(
+            script=script,
+            poll=visits_poll,
+            order=4,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
             retry_offset=86400,
@@ -158,7 +161,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             poll=name_poll,
-            order=4,
+            order=5,
             rule=ScriptStep.RESEND_MOVEON,
             num_tries=1,
             start_offset=60,
@@ -167,10 +170,13 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Congrats you're done.",
-            order=5,
+            message="You successfully registered the pregnancy with Mother Reminder.You will be sent important information about your pregnancy and reminders for checkups.",
+            order=6,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=60,
             giveup_offset=0,
         ))
-
+        if 'django.contrib.sites' in settings.INSTALLED_APPS:
+            from django.contrib.sites.models import Site
+            for poll in [district_poll, name_poll, menses_poll, visits_poll, own_poll]:
+                poll.sites.add(Site.objects.get_current())

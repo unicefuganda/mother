@@ -4,14 +4,18 @@ from django.contrib import admin
 #from rapidsms_xforms.urls import urlpatterns as xforms_urls
 #from rapidsms_backendmanager.urls import urlpatterns as backendmgr_urls
 from rapidsms_httprouter.urls import urlpatterns as router_urls
+from rapidsms_httprouter.views import receive, console
+from rapidsms.models import Contact
 from healthmodels.urls import urlpatterns as healthmodels_urls
 from contact.urls import urlpatterns as contact_urls
 from generic.views import generic
 from generic.sorters import SimpleSorter
 from rapidsms_httprouter.models import Message
-from contact.forms import FreeSearchTextForm, DistictFilterMessageForm, ReplyTextForm, DistictFilterForm, MassTextForm
+from contact.forms import FreeSearchTextForm, FreeSearchForm, DistictFilterMessageForm, ReplyTextForm, DistictFilterForm, MassTextForm
 from contact.views import view_message_history
+from mr.views import view_mother
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -62,6 +66,9 @@ urlpatterns = patterns('',
         'sort_ascending':True,
     }, name="mrs-contact"),
     url(r"^contact/(\d+)/message_history/$", view_message_history, name="message_history"),
+    url(r"^(\d+)/view/$", view_mother),
+    url("^router/receive", receive),
+    url("^router/console", staff_member_required(console), {}, 'httprouter-console'),
 )
 
 if settings.DEBUG:
@@ -72,7 +79,62 @@ if settings.DEBUG:
         (r'^', include('rapidsms.urls.static_media')),
     )
 
-from rapidsms_httprouter.router import get_router
+
+from urllib import quote_plus
+from urllib2 import urlopen
+from urlparse import urlparse, parse_qs
+from django.conf import settings
+
+# monkey patch rapidsms_httprouter to use POST instead GET
+def fetch_url(router, url):
+
+    # no url, means console, return success
+    if not url:
+        return 200
+
+    # parse our url, grabbing
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query)
+
+    # first try posting to our primary URL
+    try:
+        # first try posting to our primary URL
+        url = settings.YO_PRIMARY_URL + "?" + parsed.query
+        router.info("YO URL: " + url)
+        response = urlopen(url)
+
+        # if that worked, hurry, return the code
+        if response.getcode() == 200:
+            body = response.read()
+            router.info("YO: " + body)
+            # if they said this was ok, return so
+            if body.find('OK') >= 0:
+                return response.getcode()
+
+    except Exception as e:
+        router.error("Unable to send message, got error.", exc_info=True)
+        return 200
+
+    # next try the secondary url
+    try:
+        url = settings.YO_SECONDARY_URL + "?" + parsed.query
+        router.info("SECONDARY URL: " + url)
+        response = urlopen(url)
+
+        # read the body
+        body = response.read()
+        router.info("YO (RETRY): " + body)
+        # if they said this was ok, return so
+        if body.find('OK') >= 0:
+            return response.getcode()
+
+    except Exception as e:
+        router.error("Unable to send message, got error.", exc_info=True)
+        return 200
+
+
+from rapidsms_httprouter.router import HttpRouterThread, get_router
+HttpRouterThread.fetch_url = fetch_url
 get_router(start_workers=True)
 
 

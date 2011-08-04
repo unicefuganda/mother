@@ -27,11 +27,7 @@
         {% ifequal object.application 'poll' %}
             Poll Response
         {% else %}
-            {% ifequal object.application 'rapidsms_xforms' %}
-                Report
-            {% else %}
-                Other
-            {% endifequal %}
+            Other
         {% endifequal %}
     {% else %}
         Other
@@ -43,7 +39,7 @@
             {% for r in object.responses.all %}
                 <li>&lt;&lt;
                 {% ifequal object.application r.application %}
-                    {% if object.application == 'poll' %}
+                    {% ifequal object.application 'poll' %}
                         {% if object.poll_responses.all.0.has_errors %}
                             <span class="errormessage">
                         {% else %}
@@ -51,8 +47,8 @@
                         {% endif %}
                     {% else %}
                             <span class="othermessage">
-                        {% endif %}
-                    {% endif %}
+                    {% endifequal %}
+                {% endifequal %}
                 {{ r.text }}
                 </span>
                 </li>

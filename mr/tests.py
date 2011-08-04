@@ -69,25 +69,23 @@ class ModelTest(TestCase): #pragma: no cover
         return ss
 
     def testBasicAutoReg(self):
-        pass
-#        self.fake_incoming('join')
-#        self.assertEquals(ScriptProgress.objects.count(), 1)
-#        script_prog = ScriptProgress.objects.all()[0]
-#        self.assertEquals(script_prog.script.slug, 'emis_autoreg')
-#
-#        self.fake_script_dialog(script_prog, self.connection, [\
-#            ('emis_role', 'teacher'), \
-#            ('emis_district', 'kampala'), \
-#            ('emis_subcounty', 'kampala'), \
-#            ('emis_one_school', 'st. marys'), \
-#            ('emis_name', 'testy mctesterton'), \
-#        ])
-#        self.assertEquals(EmisReporter.objects.count(), 1)
-#        contact = EmisReporter.objects.all()[0]
-#        self.assertEquals(contact.name, 'Testy Mctesterton')
-#        self.assertEquals(contact.reporting_location, self.kampala_subcounty)
-#        self.assertEquals(contact.school, self.kampala_school)
-#        self.assertEquals(contact.groups.all()[0].name, 'Teachers')
+        self.fake_incoming('mrs join')
+        self.assertEquals(ScriptProgress.objects.count(), 1)
+        script_prog = ScriptProgress.objects.all()[0]
+        self.assertEquals(script_prog.script.slug, "mrs_autoreg")
+        self.fake_script_dialog(script_prog, Connection.objects.all()[0], [\
+            ('mrs_district', 'Kampala'),
+            ('mrs_menses', '1 month'),
+            ('mrs_name', 'oh mother'),
+            ('mrs_ownership', 'No'),
+            ('mrs_visits', '27'),
+        ])
+        self.assertEquals(Contact.objects.count(), 1)
+        contact = Contact.objects.all()[0]
+        self.assertEquals(contact.name, 'Oh Mother')
+        self.assertEquals(contact.reporting_location, self.kampala_district)
+        self.assertEquals(contact.owns_phone, False)
+        self.assertEquals(contact.anc_visits, 27)
 
     def testBadAutoReg(self):
         """
