@@ -121,7 +121,7 @@ def init_autoreg(sender, **kwargs):
             user=user, \
             type='timedelt', \
             name='mrs_menses',
-            question='When was your last menses?', \
+            question='How long has it been since your last menses?', \
             default_response='', \
         )
         script.steps.add(ScriptStep.objects.create(
