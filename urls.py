@@ -16,6 +16,7 @@ from contact.views import view_message_history
 from mr.views import view_mother
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.generic.simple import direct_to_template
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -29,7 +30,7 @@ urlpatterns = patterns('',
 
     # RapidSMS core URLs
     (r'^account/', include('rapidsms.urls.login_logout')),
-    url(r'^$', 'rapidsms.views.dashboard', name='rapidsms-dashboard'),
+    url(r'^$', direct_to_template, {'template': 'mr/index.html'}, name="rapidsms-dashboard"),
     url('^accounts/login', 'rapidsms.views.login'),
     url('^accounts/logout', 'rapidsms.views.logout'),
     # RapidSMS contrib app URLs
