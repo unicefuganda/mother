@@ -78,4 +78,4 @@ def parse_timedelta(value):
                             return number * unit_amounts[key]
         # raise ValidationError
 
-Poll.register_poll_type('timedelt', 'Time Length', parse_timedelta, db_type=Attribute.TYPE_INT)
+Poll.register_poll_type('timedelt', 'Time Length', parse_timedelta, db_type=Attribute.TYPE_FLOAT)

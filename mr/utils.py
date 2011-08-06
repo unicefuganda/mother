@@ -180,3 +180,14 @@ def init_autoreg(sender, **kwargs):
             from django.contrib.sites.models import Site
             for poll in [district_poll, name_poll, menses_poll, visits_poll, own_poll]:
                 poll.sites.add(Site.objects.get_current())
+
+
+def reminders(last_menses):
+    offset = datetime.timedelta(90)
+    curtime = last_menses + offset
+    toret = []
+    if last_menses:
+        for m in ["It's time for your first trimester visit!", "It's time for your second trimester visit!", "It's time for your third trimester visit!", "Please see your doctor for antenatal care"]:
+            toret.append((curtime, m,))
+            curtime = curtime + offset
+    return toret

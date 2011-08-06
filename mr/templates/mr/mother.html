@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-Mother {{ mother.name }}
+<div class="module">
+<h2>Mother {{ mother.name }} : Reminder Schedule</h2>
+<ul style="font-size:16px;font-family:'Trebuchet MS'">
+{% for date, message in reminders %}
+    <li><b>{{ date|date:"Y-m-d" }}</b> : {{ message }}</li>
+{% endfor %}
+</ul>
+</div>
 {% endblock %}
