@@ -1,27 +1,27 @@
-[submodule "rapidsms"]
-	path = rapidsms
-	url = git://github.com/rapidsms/rapidsms
-[submodule "rapidsms-script"]
-	path = rapidsms-script
-	url = git://github.com/daveycrockett/rapidsms-script
-[submodule "rapidsms-polls"]
-	path = rapidsms-polls
-	url = git://github.com/daveycrockett/rapidsms-polls
-[submodule "healthmodels"]
-	path = healthmodels
-	url = git://github.com/daveycrockett/healthmodels
-[submodule "rapidsms-generic"]
-	path = rapidsms-generic
-	url = git://github.com/daveycrockett/rapidsms-generic
-[submodule "rapidsms-contact"]
-	path = rapidsms-contact
-	url = git://github.com/mossplix/rapidsms-contact
-[submodule "eav"]
-	path = eav
-	url = git://github.com/daveycrockett/eav
-[submodule "rapidsms-httprouter"]
-	path = rapidsms-httprouter
-	url = git://github.com/daveycrockett/rapidsms-httprouter
-[submodule "rapidsms-ureport"]
-	path = rapidsms-ureport
-	url = git://github.com/daveycrockett/rapidsms-ureport
+[submodule "mother_project/rapidsms"]
+	path = mother_project/rapidsms
+	url = git://github.com/unicefuganda/rapidsms
+[submodule "mother_project/django_eav"]
+	path = mother_project/django_eav
+	url = git://github.com/unicefuganda/django-eav
+[submodule "mother_project/rapidsms_healthmodels"]
+	path = mother_project/rapidsms_healthmodels
+	url = git://github.com/unicefuganda/rapidsms-healthmodels
+[submodule "mother_project/rapidsms_contact"]
+	path = mother_project/rapidsms_contact
+	url = git://github.com/unicefuganda/rapidsms-contact
+[submodule "mother_project/rapidsms_generic"]
+	path = mother_project/rapidsms_generic
+	url = git://github.com/unicefuganda/rapidsms-generic
+[submodule "mother_project/rapidsms_httprouter_src"]
+	path = mother_project/rapidsms_httprouter_src
+	url = git://github.com/unicefuganda/rapidsms-httprouter
+[submodule "mother_project/rapidsms_polls"]
+	path = mother_project/rapidsms_polls
+	url = git://github.com/unicefuganda/rapidsms-polls
+[submodule "mother_project/rapidsms_script"]
+	path = mother_project/rapidsms_script
+	url = git://github.com/unicefuganda/rapidsms-script
+[submodule "mother_project/rapidsms_ureport"]
+	path = mother_project/rapidsms_ureport
+	url = git://github.com/unicefuganda/rapidsms-ureport

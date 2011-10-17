@@ -2,6 +2,20 @@
 # vim: ai ts=4 sts=4 et sw=4
 # encoding=utf-8
 
+import sys, os
+
+filedir = os.path.dirname(__file__)
+sys.path.append(os.path.join(filedir))
+sys.path.append(os.path.join(filedir, 'rapidsms', 'lib'))
+sys.path.append(os.path.join(filedir, 'rapidsms_contact'))
+sys.path.append(os.path.join(filedir, 'rapidsms_generic'))
+sys.path.append(os.path.join(filedir, 'rapidsms_httprouter_src'))
+sys.path.append(os.path.join(filedir, 'rapidsms_polls'))
+sys.path.append(os.path.join(filedir, 'rapidsms_script'))
+sys.path.append(os.path.join(filedir, 'rapidsms_ureport'))
+sys.path.append(os.path.join(filedir, 'rapidsms_healthmodels'))
+sys.path.append(os.path.join(filedir, 'django_eav'))
+
 # -------------------------------------------------------------------- #
 #                          MAIN CONFIGURATION                          #
 # -------------------------------------------------------------------- #
