@@ -28,3 +28,6 @@
 [submodule "mother_project/rapidsms_uganda_common"]
 	path = mother_project/rapidsms_uganda_common
 	url = git://github.com/unicefuganda/rapidsms-uganda-common
+[submodule "mother_project/rapidsms_xforms_src"]
+	path = mother_project/rapidsms_xforms_src
+	url = git://github.com/unicefuganda/rapidsms-xforms
