@@ -25,3 +25,6 @@
 [submodule "mother_project/rapidsms_ureport"]
 	path = mother_project/rapidsms_ureport
 	url = git://github.com/unicefuganda/rapidsms-ureport
+[submodule "mother_project/rapidsms_uganda_common"]
+	path = mother_project/rapidsms_uganda_common
+	url = git://github.com/unicefuganda/rapidsms-uganda-common
