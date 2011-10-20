@@ -1,4 +1,5 @@
 # vim: ts=4
+from .models import HealthProvider, HealthFacility
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
@@ -53,7 +54,8 @@ def mr_autoreg(**kwargs):
 
         contact = HealthProvider.objects.get(pk = connection.contact.pk)
 
-        contact.location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
+        #   contact.location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
+        contact.reporting_location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
 
         name = find_best_response(session, name_poll)
 
@@ -71,11 +73,24 @@ def mr_autoreg(**kwargs):
         contact.facility = facility
         contact.save()
     elif escargot == 'mrs_hw_reminder':
-        #   TODO: This will be used in reporting.
-        #   PatientEncounter cannot work, because there is no particular Patient as
-        #   subject here.
-        pass
+        qn1 = script.steps.get(poll__name = 'hw_question_1').poll
+        qn2 = script.steps.get(poll__name = 'hw_question_2').poll
+        qn3 = script.steps.get(poll__name = 'hw_question_3').poll
+        qn4 = script.steps.get(poll__name = 'hw_question_4').poll
 
+        contact     = HealthProvider.objects.get(pk = connection.contact.pk)
+        first_anc   = find_best_response(session, qn1)
+        fourth_anc  = find_best_response(session, qn2)
+        art_treated = find_best_response(session, qn3)
+        hiv_diag    = find_best_response(session, qn4)
+
+        questionnaire = Questionnaire(
+            health_worker   = contact,
+            first_anc_visit = first_anc,
+           fourth_anc_visit = fourth_anc,
+           art_treated_mums = art_treated,
+           six_month_hiv_diag = hiv_diag)
+        questionnaire.save()
 
 required_models = ['eav.models', 'poll.models', 'script.models', 'django.contrib.auth.models']
 
@@ -292,7 +307,7 @@ def init_autoreg(sender, **kwargs):
 
         script.steps.add(ScriptStep.objects.create(
             script = script,
-            poll   = Poll.objects.create(user = user, type = 'district',
+            poll   = Poll.objects.create(user = user, type = Poll.TYPE_NUMERIC,
                         name     = 'hw_question_1',
                         question = 'How many women came for their first ANC visit this month?',
                 default_response = ''),
@@ -305,7 +320,7 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script = script,
-            poll   = Poll.objects.create(user = user, type = 'district',
+            poll   = Poll.objects.create(user = user, type = Poll.TYPE_NUMERIC,
                         name     = 'hw_question_2',
                         question = 'How many women came for their fourth ANC visit this month?',
                 default_response = ''),
@@ -318,8 +333,8 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script = script,
-            poll   = Poll.objects.create(user = user, type = 'district',
-                        name     = 'hw_question_2',
+            poll   = Poll.objects.create(user = user, type = Poll.TYPE_NUMERIC,
+                        name     = 'hw_question_3',
                         question = 'How many HIV+ mothers are receiving anti-retroviral treatment?',
                 default_response = ''),
             order         = 2,
@@ -331,8 +346,8 @@ def init_autoreg(sender, **kwargs):
         ))
         script.steps.add(ScriptStep.objects.create(
             script = script,
-            poll   = Poll.objects.create(user = user, type = 'district',
-                        name     = 'hw_question_2',
+            poll   = Poll.objects.create(user = user, type = Poll.TYPE_NUMERIC,
+                        name     = 'hw_question_4',
                         question = 'How many infants returned for 6-week checkup for early infant HIV diagnosis?',
                 default_response = ''),
             order         = 3,
