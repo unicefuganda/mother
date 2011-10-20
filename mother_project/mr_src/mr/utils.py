@@ -1,3 +1,4 @@
+# vim: ts=4
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
@@ -6,7 +7,7 @@ from script.utils.handling import find_best_response, find_closest_match
 from rapidsms.models import Contact
 from rapidsms.contrib.locations.models import Location
 from datetime import *
-#from healthmodels import HealthProvider, HealthFacility
+from healthmodels.models import HealthProvider, HealthFacility
 
 def mr_autoreg(**kwargs):
 
@@ -60,9 +61,14 @@ def mr_autoreg(**kwargs):
             name = ' '.join([n.capitalize() for n in name.lower().split(' ')])
             contact.name = name[:100]
 
-        facility = HealthFacility(location = contact.reporting_location)
-        #   TODO: Use hc_poll and hclevel_poll to set facility attributes.
-        contact.facility = facilty
+        #   TODO: Tell Marcus the dox need to change to reflect this.
+        #   Apparently, we need not bother with this.
+        #   facility_type = HealthFacilityType()
+        facility = HealthFacility(
+                    location  = contact.reporting_location,
+                        type  = facility_type,
+                        name  = find_best_response(session, hc_poll))
+        contact.facility = facility
         contact.save()
     elif escargot == 'mrs_hw_reminder':
         #   TODO: This will be used in reporting.
