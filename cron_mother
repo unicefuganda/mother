@@ -1,2 +1,2 @@
-* * * * * /var/www/env/mother/bin/python /var/www/prod/mother/manage.py check_script_progress -e 7 -l 20
+* * * * * www /var/www/env/mother/bin/python /var/www/prod/mother/manage.py check_script_progress -e 7 -l 20
 
