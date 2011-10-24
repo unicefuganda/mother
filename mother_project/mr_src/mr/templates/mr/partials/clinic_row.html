@@ -1,0 +1,10 @@
+{% extends 'generic/partials/partial_row.html' %}
+{% block remaining_row_content %}
+<td><a href="/{{ object.pk }}/view">{{ object.name }}</a></td>
+<td>{% if object.default_connection.identity %}
+    <a href="/contact/{{ object.default_connection.pk }}/message_history">
+        {{ object.default_connection.identity }}
+    </a>
+{% endif %}</td>
+<td>{{ object.type.name }}</td>
+{% endblock %}

@@ -1,5 +1,4 @@
 # vim: ts=4
-#   from .models import HealthProvider, HealthFacility
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
@@ -48,16 +47,13 @@ def mr_autoreg(**kwargs):
 
     elif escargot == 'mrs_hw_autoreg':
         district_poll = script.steps.get(poll__name='hw_district').poll
-        hc_poll = script.steps.get(poll__name='hw_healthcentre').poll
-        hclevel_poll = script.steps.get(poll__name='hw_hclevel').poll
-        name_poll = script.steps.get(poll__name='hw_name').poll
+        hc_poll       = script.steps.get(poll__name='hw_healthcentre').poll
+        hclevel_poll  = script.steps.get(poll__name='hw_hclevel').poll
+        name_poll     = script.steps.get(poll__name='hw_name').poll
 
         contact = HealthProvider.objects.get(pk = connection.contact.pk)
-
-        #   contact.location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
         contact.reporting_location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
-
-        name = find_best_response(session, name_poll)
+        name    = find_best_response(session, name_poll)
 
         if name:
             name = ' '.join([n.capitalize() for n in name.lower().split(' ')])

@@ -92,6 +92,7 @@ RAPIDSMS_TABS = [
     ('contact-messagelog', 'Messages'),
     ("mrs-contact", "Mothers"),
     ("hw-contact", "Health Workers"),
+    ("hw-clinic", "Health Facilities")
 ]
 
 
