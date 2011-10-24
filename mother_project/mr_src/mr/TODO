@@ -1,6 +1,2 @@
-1.  Mothers view (scheduled messages sent)
-2.  CSV export
-3.  Health workers view (ordered by district, (groups of) clinics).
-
-1.  Use hc_poll and hclevel_poll to set facility attributes.
-2.  This will be used in reporting.
+1.  CSV export
+2.  Health workers view (ordered by district, (groups of) clinics).
