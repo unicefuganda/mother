@@ -8,6 +8,7 @@ from poll.models import Poll
 from django.core.exceptions import ValidationError
 from eav.models import Attribute
 from healthmodels.models import HealthProvider
+from django.db import models
 
 post_syncdb.connect(init_structures, weak=False)
 script_progress_was_completed.connect(mr_autoreg, weak=False)

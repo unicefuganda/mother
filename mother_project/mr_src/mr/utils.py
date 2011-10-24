@@ -1,5 +1,5 @@
 # vim: ts=4
-from .models import HealthProvider, HealthFacility
+#   from .models import HealthProvider, HealthFacility
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
