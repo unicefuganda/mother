@@ -51,9 +51,16 @@ def mr_autoreg(**kwargs):
         hclevel_poll  = script.steps.get(poll__name='hw_hclevel').poll
         name_poll     = script.steps.get(poll__name='hw_name').poll
 
-        contact = HealthProvider.objects.get(pk = connection.contact.pk)
-        contact.reporting_location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
-        name    = find_best_response(session, name_poll)
+        #   TODO: Is this even legal in this country?
+        contact, _ = HealthProvider.objects.get_or_create(pk = connection.contact.pk)
+        try:
+            place = find_best_response(session, district_poll)
+            if not place: [][0]
+            matching = Location.objects.filter(name = place)[0]
+            contact.reporting_location = matching
+        except IndexError:
+            contact.reporting_location = Location.tree.root_nodes[0]
+        name = find_best_response(session, name_poll)
 
         if name:
             name = ' '.join([n.capitalize() for n in name.lower().split(' ')])
@@ -63,8 +70,9 @@ def mr_autoreg(**kwargs):
         #   Apparently, we need not bother with this.
         #   facility_type = HealthFacilityType()
         facility = HealthFacility(
-                    location  = contact.reporting_location,
-                        type  = facility_type,
+                    #   TODO: Turn location into a Point.
+                    #   location  = contact.reporting_location,
+                        #   type  = facility_type,
                         name  = find_best_response(session, hc_poll))
         contact.facility = facility
         contact.save()
