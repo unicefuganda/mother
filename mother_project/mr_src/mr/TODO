@@ -7,3 +7,7 @@
 - How to turn a Location into a Point instance?
 
 - How to get at `message.db_message` in tests?
+./utils.py:        #   TODO: Is this even legal in this country?
+./utils.py:        #   TODO: Tell Marcus the dox need to change to reflect this.
+./utils.py:                    #   TODO: Turn location into a Point.
+./app.py:                #   I want to use the original message.text downstairs.  XXX
