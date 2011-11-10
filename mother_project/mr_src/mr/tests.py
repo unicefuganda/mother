@@ -64,10 +64,12 @@ class ModelTest(TestCase): #pragma: no cover
         return ss
 
     def testBasicAutoReg(self):
+        spc = ScriptProgress.objects.count()
         self.fake_incoming('mrs join')
-        self.assertEquals(ScriptProgress.objects.count(), 1)
+        self.assertEquals(ScriptProgress.objects.count(), spc + 1)
         script_prog = ScriptProgress.objects.all()[0]
         self.assertEquals(script_prog.script.slug, "mrs_autoreg")
+        cc = Contact.objects.count()
         self.fake_script_dialog(script_prog, Connection.objects.all()[0], [\
             ('mrs_district', 'Kampala'),
             ('mrs_menses', '1 month'),
@@ -75,7 +77,7 @@ class ModelTest(TestCase): #pragma: no cover
             ('mrs_ownership', 'No'),
             ('mrs_visits', '27'),
         ])
-        self.assertEquals(Contact.objects.count(), 1)
+        self.assertEquals(Contact.objects.count(), cc + 1)
         contact = Contact.objects.all()[0]
         self.assertEquals(contact.name, 'Oh Mother')
         self.assertEquals(contact.reporting_location, self.kampala_district)
@@ -83,19 +85,21 @@ class ModelTest(TestCase): #pragma: no cover
         self.assertEquals(contact.anc_visits, 27)
 
     def testHWAutoReg(self):
+        spc = ScriptProgress.objects.count()
         self.fake_incoming('hw join')
-        self.assertEquals(ScriptProgress.objects.count(), 1)
+        self.assertEquals(ScriptProgress.objects.count(), spc + 1)
         script_prog = ScriptProgress.objects.all()[0]
         self.assertEquals(script_prog.script.slug, "mrs_hw_autoreg")
+        cc = Contact.objects.count()
         self.fake_script_dialog(script_prog, Connection.objects.all()[0], [\
             ('hw_district', 'Kampala'),
             ('hw_healthcentre', 'Kasubi'),
             ('hw_hclevel', 'hciv'),
             ('hw_name', 'David McCann')
         ])
-        self.assertEquals(Contact.objects.count(), 1)
+        self.assertEquals(Contact.objects.count(), cc + 1)
         contact = Contact.objects.all()[0]
-        self.assertEquals(contact.name, 'David McCann')
+        self.assertEquals(contact.name, 'David Mccann')
         self.assertEquals(contact.reporting_location, self.kampala_district)
 
     def testBadAutoReg(self):
