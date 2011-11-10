@@ -24,7 +24,7 @@ sys.path.append(os.path.join(filedir, 'mr_src'))
 # -------------------------------------------------------------------- #
 TIME_ZONE = "Africa/Kampala"
 
-SHORTCODE_PREFIX = 'mrs '
+SHORTCODE_PREFIX = '^(mrs|hw) '
 # you should configure your database here before doing any real work.
 # see: http://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
