@@ -16,7 +16,7 @@ from script.utils.outgoing import check_progress
 from script.models import Script, ScriptProgress, ScriptSession, ScriptResponse
 from rapidsms_httprouter.router import get_router
 from script.signals import script_progress_was_completed, script_progress
-from poll.utils import create_attributes
+from poll.management import create_attributes
 from .utils import init_autoreg
 
 class ModelTest(TestCase): #pragma: no cover
