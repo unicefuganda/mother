@@ -2,3 +2,8 @@
 2.  Health workers view (ordered by district, (groups of) clinics).
 3.  Clinic display
 4.  Unit tests.
+
+
+- How to turn a Location into a Point instance?
+
+- How to get at `message.db_message` in tests?
