@@ -24,8 +24,6 @@ sys.path.append(os.path.join(filedir, 'mr_src'))
 # -------------------------------------------------------------------- #
 TIME_ZONE = "Africa/Kampala"
 
-SHORTCODE_PREFIX = '^(mrs|hw) '
-
 KEYWORDS_AND_SLUGS = {
     '^(mrs)\s*' :   'mrs_autoreg',
     '^(hw)\s*'  :   'mrs_hw_autoreg'
