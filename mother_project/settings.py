@@ -23,7 +23,11 @@ sys.path.append(os.path.join(filedir, 'mr_src'))
 # -------------------------------------------------------------------- #
 TIME_ZONE = "Africa/Kampala"
 
-SHORTCODE_PREFIX = 'mrs '
+KEYWORDS_AND_SLUGS = {
+    '^(mrs)\s*' :   'mrs_autoreg',
+    '^(hw)\s*'  :   'mrs_hw_autoreg'
+}
+
 # you should configure your database here before doing any real work.
 # see: http://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -89,6 +93,8 @@ SMS_APPS = [
 RAPIDSMS_TABS = [
     ('contact-messagelog', 'Messages'),
     ("mrs-contact", "Mothers"),
+    ("hw-contact", "Health Workers"),
+    ("hw-clinic", "Health Facilities")
 ]
 
 

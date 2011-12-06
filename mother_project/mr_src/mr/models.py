@@ -1,15 +1,27 @@
 from script.signals import script_progress_was_completed, script_progress
 from django.db.models.signals import post_syncdb
+from django.db import *
 from .utils import mr_autoreg, init_structures
 import datetime
 import re
 from poll.models import Poll
 from django.core.exceptions import ValidationError
 from eav.models import Attribute
+from healthmodels.models import HealthProvider
+from django.db import models
 
 post_syncdb.connect(init_structures, weak=False)
 script_progress_was_completed.connect(mr_autoreg, weak=False)
 
+class Questionnaire(models.Model):
+    health_worker       = models.ForeignKey(HealthProvider)
+    first_anc_visit     = models.IntegerField()
+    fourth_anc_visit    = models.IntegerField()
+    art_treated_mums    = models.IntegerField()
+    six_month_hiv_diag  = models.IntegerField()
+
+    def __unicode__(self):
+        return '%s: %d, %d, %d, %d' % (str(health_worker), first_anc_visit, fourth_anc_visit, art_treated_mums, six_month_hiv_diag)
 
 def dl_distance(s1, s2):
     """

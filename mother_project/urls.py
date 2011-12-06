@@ -7,6 +7,7 @@ from rapidsms_httprouter.urls import urlpatterns as router_urls
 from rapidsms_httprouter.views import receive, console
 from rapidsms.models import Contact
 from healthmodels.urls import urlpatterns as healthmodels_urls
+from healthmodels.models import HealthProvider, HealthFacility
 from contact.urls import urlpatterns as contact_urls
 from generic.views import generic
 from generic.sorters import SimpleSorter
@@ -66,6 +67,35 @@ urlpatterns = patterns('',
         'sort_column':'name',
         'sort_ascending':True,
     }, name="mrs-contact"),
+    url(r'^healthworker/$', login_required(generic), {
+        'model':HealthProvider,
+        'results_title':'Health Workers',
+        'filter_forms':[FreeSearchForm, DistictFilterForm],
+        'action_forms':[MassTextForm],
+        'objects_per_page':25,
+        'partial_row':'mr/partials/hw_row.html',
+        'columns':[('Name', True, 'name', SimpleSorter()),
+                  ('Health Centre', True, 'facility', SimpleSorter()),
+                 ('Number', True, 'connection__identity', SimpleSorter(),),
+                 ('District', True, 'reporting_location__name', SimpleSorter(),),
+                 ],
+        'sort_column':'name',
+        'sort_ascending':True,
+    }, name="hw-contact"),
+    url(r'^clinic/$', login_required(generic), {
+        'model':HealthFacility,
+        'results_title':'Health Facility',
+        'filter_forms':[FreeSearchForm, DistictFilterForm],
+        # 'action_forms':[MassTextForm],
+        'objects_per_page':25,
+        'partial_row':'mr/partials/clinic_row.html',
+        'columns':[('Name', True, 'name', SimpleSorter()),
+                  ('Location', True, 'reporting_location__name', SimpleSorter()),
+                 ('Type', True, 'type__name', SimpleSorter(),),
+                 ],
+        'sort_column':'name',
+        'sort_ascending':True,
+    }, name="hw-clinic"),
     url(r"^contact/(\d+)/message_history/$", view_message_history, name="message_history"),
     url(r"^(\d+)/view/$", view_mother),
     url("^router/receive", receive),

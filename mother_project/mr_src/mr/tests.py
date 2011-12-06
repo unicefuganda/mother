@@ -16,17 +16,15 @@ from script.utils.outgoing import check_progress
 from script.models import Script, ScriptProgress, ScriptSession, ScriptResponse
 from rapidsms_httprouter.router import get_router
 from script.signals import script_progress_was_completed, script_progress
-from poll.utils import create_attributes
+from poll.management import create_attributes
 from .utils import init_autoreg
 
 class ModelTest(TestCase): #pragma: no cover
-
     def fake_incoming(self, message, connection=None):
         if connection is None:
             connection = self.connection
         router = get_router()
         router.handle_incoming(connection.backend.name, connection.identity, message)
-
 
     def spoof_incoming_obj(self, message, connection=None):
         if connection is None:
@@ -35,11 +33,9 @@ class ModelTest(TestCase): #pragma: no cover
         incomingmessage.db_message = Message.objects.create(direction='I', connection=Connection.objects.all()[0], text=message)
         return incomingmessage
 
-
     def assertResponseEquals(self, message, expected_response, connection=None):
         s = self.fake_incoming(message, connection)
         self.assertEquals(s.response, expected_response)
-
 
     def setUp(self):
         init_autoreg(None)
@@ -55,7 +51,6 @@ class ModelTest(TestCase): #pragma: no cover
         self.kampala_subcounty = Location.objects.create(type=subcounty, name='Kampala')
         self.gulu_subcounty = Location.objects.create(type=subcounty, name='Gulu')
 
-
     def fake_script_dialog(self, script_prog, connection, responses, emit_signal=True):
         script = script_prog.script
         ss = ScriptSession.objects.create(script=script, connection=connection, start_time=datetime.datetime.now())
@@ -69,10 +64,12 @@ class ModelTest(TestCase): #pragma: no cover
         return ss
 
     def testBasicAutoReg(self):
+        spc = ScriptProgress.objects.count()
         self.fake_incoming('mrs join')
-        self.assertEquals(ScriptProgress.objects.count(), 1)
+        self.assertEquals(ScriptProgress.objects.count(), spc + 1)
         script_prog = ScriptProgress.objects.all()[0]
         self.assertEquals(script_prog.script.slug, "mrs_autoreg")
+        cc = Contact.objects.count()
         self.fake_script_dialog(script_prog, Connection.objects.all()[0], [\
             ('mrs_district', 'Kampala'),
             ('mrs_menses', '1 month'),
@@ -80,12 +77,30 @@ class ModelTest(TestCase): #pragma: no cover
             ('mrs_ownership', 'No'),
             ('mrs_visits', '27'),
         ])
-        self.assertEquals(Contact.objects.count(), 1)
+        self.assertEquals(Contact.objects.count(), cc + 1)
         contact = Contact.objects.all()[0]
         self.assertEquals(contact.name, 'Oh Mother')
         self.assertEquals(contact.reporting_location, self.kampala_district)
         self.assertEquals(contact.owns_phone, False)
         self.assertEquals(contact.anc_visits, 27)
+
+    def testHWAutoReg(self):
+        spc = ScriptProgress.objects.count()
+        self.fake_incoming('hw join')
+        self.assertEquals(ScriptProgress.objects.count(), spc + 1)
+        script_prog = ScriptProgress.objects.all()[0]
+        self.assertEquals(script_prog.script.slug, "mrs_hw_autoreg")
+        cc = Contact.objects.count()
+        self.fake_script_dialog(script_prog, Connection.objects.all()[0], [\
+            ('hw_district', 'Kampala'),
+            ('hw_healthcentre', 'Kasubi'),
+            ('hw_hclevel', 'hciv'),
+            ('hw_name', 'David McCann')
+        ])
+        self.assertEquals(Contact.objects.count(), cc + 1)
+        contact = Contact.objects.all()[0]
+        self.assertEquals(contact.name, 'David Mccann')
+        self.assertEquals(contact.reporting_location, self.kampala_district)
 
     def testBadAutoReg(self):
         """
