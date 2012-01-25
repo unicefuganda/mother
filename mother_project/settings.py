@@ -25,8 +25,9 @@ sys.path.append(os.path.join(filedir, 'mr_src'))
 TIME_ZONE = "Africa/Kampala"
 
 KEYWORDS_AND_SLUGS = {
-    '^(mrs)\s*' :   'mrs_autoreg',
-    '^(hw)\s*'  :   'mrs_hw_autoreg'
+    #   '^(mrs)\s*' :   'mrs_autoreg',
+    '^(join)\s*'    :   'mrs_autoreg',
+    '^(hw)\s*'      :   'mrs_hw_autoreg'
 }
 
 # you should configure your database here before doing any real work.
