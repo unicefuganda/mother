@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     "generic",
     "contact",
     "script",
+    "south",
 ]
 
 SMS_APPS = [
