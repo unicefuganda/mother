@@ -20,6 +20,7 @@ class App (AppBase):
             if match:
                 escargot     = settings.KEYWORDS_AND_SLUGS[keywd]
                 message.text = message.text[len(match.group(0)):]
+                break
         if not message.connection.contact:
             message.connection.contact = Contact.objects.create(name='Anonymous User')
             message.connection.save()

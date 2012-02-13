@@ -164,8 +164,7 @@ def fetch_url(router, url):
         return 200
 
 
-from rapidsms_httprouter.router import HttpRouterThread, get_router
-HttpRouterThread.fetch_url = fetch_url
+from rapidsms_httprouter.router import get_router
 get_router(start_workers=True)
 
 
