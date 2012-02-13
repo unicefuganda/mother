@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django_nose",
     "djtables",
     "rapidsms",
+    "rapidsms_xforms",
     "mptt",
     "uni_form",
     "django_extensions",
