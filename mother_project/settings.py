@@ -154,6 +154,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.cache.CacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 # -------------------------------------------------------------------- #
