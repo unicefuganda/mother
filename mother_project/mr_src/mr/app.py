@@ -21,7 +21,7 @@ class App (AppBase):
                 escargot     = settings.KEYWORDS_AND_SLUGS[keywd]
                 message.text = message.text[len(match.group(0)):]
                 break
-        if not message.connection.contact:
+        if (not message.connection.contact) or (not ScriptProgress.objects.filter(connection = message.connection)):
             message.connection.contact = Contact.objects.create(name='Anonymous User')
             message.connection.save()
             ScriptProgress.objects.create(
