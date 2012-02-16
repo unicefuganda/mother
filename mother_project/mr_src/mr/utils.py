@@ -144,7 +144,8 @@ def init_autoreg(sender, **kwargs):
         ))
         district_poll = Poll.objects.create(
             user=user, \
-            type='district', \
+            #   type='district', \
+            type=Poll.TYPE_LOCATION, \
             name='mrs_district',
             question='What is the name of your district?', \
             default_response='', \
