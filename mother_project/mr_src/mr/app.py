@@ -22,6 +22,16 @@ class App (AppBase):
                 escargot     = settings.KEYWORDS_AND_SLUGS[keywd]
                 message.text = message.text[len(match.group(0)):]
                 break
+        if escargot == 'mrs_opt_out':
+          if not message.connection.contact:
+            # Stop sending you nothing? :-p
+            return False
+          sps = ScriptProgress.objects.filter(connection = message.connection)
+          sps.delete()
+          ScriptProgress.objects.create(
+              script = Script.objects.get(slug = escargot),
+          connection = message.connection)
+          return True
         if (not message.connection.contact) or (not ScriptProgress.objects.filter(connection = message.connection)):
             message.connection.contact = Contact.objects.create(name='Anonymous User')
             message.connection.contact.last_menses = datetime.now() - timedelta(days = 45)

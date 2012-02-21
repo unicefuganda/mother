@@ -17,7 +17,9 @@ def mr_autoreg(**kwargs):
     session = ScriptSession.objects.filter(script=progress.script, connection=connection).order_by('-end_time')[0]
     script = progress.script
 
-    if escargot == 'mrs_autoreg':
+    if escargot == 'mrs_opt_out':
+        pass    #   For now. TODO:  Clear from DB?
+    elif escargot == 'mrs_autoreg':
         district_poll = script.steps.get(poll__name='mrs_district').poll
         ownership_poll = script.steps.get(poll__name='mrs_ownership').poll
         menses_poll = script.steps.get(poll__name='mrs_menses').poll
@@ -110,6 +112,18 @@ def init_structures(sender, **kwargs):
         pass
 
 def init_autoreg(sender, **kwargs):
+    script, created = Script.objects.get_or_create(
+            slug='mrs_opt_out', defaults={
+            'name':"General opt-out script"})
+    if created:
+        script.steps.add(ScriptStep.objects.create(
+            script=script,
+            message="You will not receive any more messages. Thanks anyway.",
+            order=0,
+            rule=ScriptStep.WAIT_MOVEON,
+            start_offset=0,
+            giveup_offset=60,
+        ))
     script, created = Script.objects.get_or_create(
             slug="mrs_autoreg", defaults={
             'name':"Mother reminder autoregistration script"})

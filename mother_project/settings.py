@@ -28,7 +28,8 @@ TIME_ZONE = "Africa/Kampala"
 KEYWORDS_AND_SLUGS = {
     #   '^(mrs)\s*' :   'mrs_autoreg',
     '^(join)\s*'    :   'mrs_autoreg',
-    '^(hw)\s*'      :   'mrs_hw_autoreg'
+    '^(hw)\s*'      :   'mrs_hw_autoreg',
+    '^(stop)\s*'    :   'mrs_opt_out'
 }
 
 # you should configure your database here before doing any real work.
