@@ -81,8 +81,7 @@ INSTALLED_APPS = [
     "generic",
     "contact",
     "script",
-    "south",
-]
+] + ([] if os.getenv('WITHOUT_SOUTH') else ['south'])
 
 SMS_APPS = [
     "mr",
