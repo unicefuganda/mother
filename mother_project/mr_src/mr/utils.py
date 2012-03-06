@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from poll.models import Poll
-from script.models import Script, ScriptStep, ScriptSession
+from script.models import Script, ScriptStep, ScriptSession, ScriptProgress
 from script.utils.handling import find_best_response, find_closest_match
 from rapidsms.models import Contact
 from rapidsms.contrib.locations.models import Location
