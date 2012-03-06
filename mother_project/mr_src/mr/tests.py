@@ -39,7 +39,7 @@ class ModelTest(TestCase): #pragma: no cover
 
     def setUp(self):
         init_autoreg(None)
-        create_attributes()
+        # create_attributes()
         User.objects.get_or_create(username='admin')
         self.backend = Backend.objects.create(name='test')
         self.connection = Connection.objects.create(identity='8675309', backend=self.backend)
