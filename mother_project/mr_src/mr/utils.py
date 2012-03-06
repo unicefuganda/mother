@@ -10,7 +10,6 @@ from datetime import *
 from healthmodels.models import HealthProvider, HealthFacility
 
 def mr_autoreg(**kwargs):
-
     connection = kwargs['connection']
     progress   = kwargs['sender']
     escargot   = progress.script.slug
@@ -18,7 +17,7 @@ def mr_autoreg(**kwargs):
     script = progress.script
 
     if escargot == 'mrs_opt_out':
-        pass    #   For now. TODO:  Clear from DB?
+        ScriptProgress.objects.get(connection = connection).delete()
     elif escargot == 'mrs_autoreg':
         district_poll = script.steps.get(poll__name='mrs_district').poll
         ownership_poll = script.steps.get(poll__name='mrs_ownership').poll
