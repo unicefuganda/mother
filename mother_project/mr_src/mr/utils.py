@@ -30,7 +30,7 @@ def mr_autoreg(**kwargs):
             contact.last_menses = datetime.now() - timedelta(weeks = last_menses)
         else:
             contact.last_menses = datetime.now() - timedelta(days = 45)
-        contact.anc_visits = find_best_response(visits_poll) or 0
+        contact.anc_visits = find_best_response(session, visits_poll) or 0
         contact.save()
     elif escargot == 'mrs_hw_autoreg':
         district_poll = script.steps.get(poll__name='hw_district').poll
