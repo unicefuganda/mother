@@ -166,7 +166,7 @@ def init_autoreg(sender, **kwargs):
         script.steps.add(ScriptStep.objects.create(
             script=script,
             message='Thank you for answering all the questions. You will now receive weekly information about keeping a healthy lifestyle for you and your child, all messages FREE!',
-            rule=Poll.WAIT_MOVEON,
+            rule=ScriptStep.WAIT_MOVEON,
             order=3,
             start_offset=0
         ))
