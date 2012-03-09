@@ -19,33 +19,19 @@ def mr_autoreg(**kwargs):
     if escargot == 'mrs_opt_out':
         ScriptProgress.objects.get(connection = connection).delete()
     elif escargot == 'mrs_autoreg':
-        district_poll = script.steps.get(poll__name='mrs_district').poll
-        ownership_poll = script.steps.get(poll__name='mrs_ownership').poll
-        menses_poll = script.steps.get(poll__name='mrs_menses').poll
-        visits_poll = script.steps.get(poll__name='mrs_visits').poll
-        name_poll = script.steps.get(poll__name='mrs_name').poll
-
-        contact = connection.contact
-    
-        contact.reporting_location = find_best_response(session, district_poll) or Location.tree.root_nodes()[0]
-
-        name = find_best_response(session, name_poll)
-        if name:
-            name = ' '.join([n.capitalize() for n in name.lower().split(' ')])
-            contact.name = name[:100]
-
-        resps = session.responses.filter(response__poll=ownership_poll, \
-                                     response__has_errors=False).order_by('-response__date')
-        if resps.count() and resps[0].response.categories.filter(category__name='no').count():
-            contact.owns_phone = False
-
+        location_poll   = script.steps.get(poll__name='mrs_location').poll
+        menses_poll     = script.steps.get(poll__name='mrs_mensesweeks').poll
+        visits_poll     = script.steps.get(poll__name='mrs_anc_visits').poll
+        contact         = connection.contact
+        contact.reporting_location = find_best_response(session, location_poll) or Location.tree.root_nodes()[0]
+        #   TODO:   What to do for the names?
         last_menses = find_best_response(session, menses_poll)
         if last_menses:
-            contact.last_menses = datetime.now() - timedelta(last_menses)
-
-        contact.anc_visits = find_best_response(session, visits_poll) or 0
+            contact.last_menses = datetime.now() - timedelta(weeks = last_menses)
+        else:
+            contact.last_menses = datetime.now() - timedelta(days = 45)
+        contact.anc_visits = find_best_response(visits_poll) or 0
         contact.save()
-
     elif escargot == 'mrs_hw_autoreg':
         district_poll = script.steps.get(poll__name='hw_district').poll
         hc_poll       = script.steps.get(poll__name='hw_healthcentre').poll
@@ -117,7 +103,7 @@ def init_autoreg(sender, **kwargs):
     if created:
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="You will not receive any more messages. Thanks anyway.",
+            message="You will no longer receive FREE messages from the healthy mothers group. If you want to join again please send JOIN to 6400.",
             order=0,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=0,
@@ -128,121 +114,67 @@ def init_autoreg(sender, **kwargs):
             'name':"Mother reminder autoregistration script"})
     if created:
         user, created = User.objects.get_or_create(username="admin")
-
+        location_poll = Poll.objects.create
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="Welcome to the Mother Reminder registration. Please answer the questions in the following messages.",
+            poll=Poll.objects.create(
+                user=user, \
+                type=Poll.TYPE_LOCATION, \
+                name='mrs_location',
+                question="Thank you for joining the healthy mothers group, all messages FREE! From which district are you? Please reply with the name of your district.",
+                default_response='', \
+            ),
             order=0,
-            rule=ScriptStep.WAIT_MOVEON,
+            rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
-            giveup_offset=60,
+            retry_offset=86400,
+            num_tries=2,
+            giveup_offset=86400,
         ))
-        own_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_TEXT, \
-            name='mrs_ownership',
-            question='Does the mother own this phone?', \
-            default_response='', \
-        )
-        own_poll.add_yesno_categories()
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            poll=own_poll,
+            poll=Poll.objects.create(
+                user=user,
+                type=Poll.TYPE_NUMERIC,
+                name='mrs_mensesweeks',
+                question='Thank you! How many weeks since your the last menses?',
+                default_response=''
+            )
             order=1,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
             retry_offset=86400,
-            num_tries=1,
+            num_tries=2,
             giveup_offset=86400,
         ))
-        district_poll = Poll.objects.create(
-            user=user, \
-            #   type='district', \
-            type=Poll.TYPE_LOCATION, \
-            name='mrs_district',
-            question='What is the name of your district?', \
-            default_response='', \
-        )
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            poll=district_poll,
+            poll=Poll.objects.create(
+                user=user,
+                type=Poll.TYPE_NUMERIC,
+                name='mrs_anc_visits',
+                question="You've almost finished! One last question: how many times did you visit the clinic during pregnancy? Please reply with the number of visits you have made.",
+                default_response=''
+            ),
             order=2,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
             retry_offset=86400,
-            num_tries=1,
+            num_tries=2,
             giveup_offset=86400,
         ))
-        menses_poll = Poll.objects.create(
-            user=user, \
-            type='timedelt', \
-            name='mrs_menses',
-            question='How long has it been since your last menses?', \
-            default_response='', \
-        )
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            poll=menses_poll,
+            message='Thank you for answering all the questions. You will now receive weekly information about keeping a healthy lifestyle for you and your child, all messages FREE!',
+            rule=Poll.WAIT_MOVEON,
             order=3,
-            rule=ScriptStep.STRICT_MOVEON,
-            start_offset=0,
-            retry_offset=86400,
-            num_tries=1,
-            giveup_offset=86400,
+            start_offset=0
         ))
-        visits_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_NUMERIC, \
-            name='mrs_visits',
-            question='How many visits to your health provider have you made?', \
-            default_response='', \
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=visits_poll,
-            order=4,
-            rule=ScriptStep.STRICT_MOVEON,
-            start_offset=0,
-            retry_offset=86400,
-            num_tries=1,
-            giveup_offset=86400,
-        ))
-        name_poll = Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_TEXT, \
-            name='mrs_name',
-            question='What is your name?', \
-            default_response='', \
-        )
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            poll=name_poll,
-            order=5,
-            rule=ScriptStep.RESEND_MOVEON,
-            num_tries=1,
-            start_offset=60,
-            retry_offset=86400,
-            giveup_offset=86400,
-        ))
-        script.steps.add(ScriptStep.objects.create(
-            script=script,
-            message="You successfully registered the pregnancy with Mother Reminder.You will be sent important information about your pregnancy and reminders for checkups.",
-            order=6,
-            rule=ScriptStep.WAIT_MOVEON,
-            start_offset=60,
-            giveup_offset=0,
-        ))
-        if 'django.contrib.sites' in settings.INSTALLED_APPS:
-            from django.contrib.sites.models import Site
-            script.sites.add(Site.objects.get_current())
-            for poll in [district_poll, name_poll, menses_poll, visits_poll, own_poll]:
-                poll.sites.add(Site.objects.get_current())
     script, created  = Script.objects.get_or_create(
             slug="mrs_hw_autoreg", defaults={
             'name':"Health worker auto-registration script."})
     if created:
         user, created = User.objects.get_or_create(username="admin")
-
         script.steps.add(ScriptStep.objects.create(
             script=script,
             message="Welcome to the Health Worker registration for Mother Reminder. Please answer the questions in the following messages.",
