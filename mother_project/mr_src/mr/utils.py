@@ -139,7 +139,7 @@ def init_autoreg(sender, **kwargs):
                 name='mrs_mensesweeks',
                 question='Thank you! How many weeks since your the last menses?',
                 default_response=''
-            )
+            ),
             order=1,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
