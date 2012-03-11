@@ -32,11 +32,10 @@ class Command(BaseCommand):
       this_week = OUTGOING_MESSAGES[week]
       for day in this_week.keys():
         mother_queue  = Queue.Queue()
-        this_day      = this_week[day]
         for mother in Contact.objects.raw('''
 SELECT * FROM rapidsms_contact WHERE
-  (last_menses + ('%d WEEK %d DAY' :: INTERVAL)) :: DATE = NOW() :: DATE''' % (week, day)):
-          mother_queue.put((mother.connection, this_day))
+  (last_menses + ('59 WEEK' :: INTERVAL)) :: DATE < NOW() :: DATE''' % (week,)):
+          mother_queue.put((mother.connection, 'If you want to stop receiving FREE messages from the healthy mothers group please reply with STOP.'))
         senders       = []
         for _ in range(os.getenv('SENDER_THREADS', 10))
           sdr = Sender(mother_queue)
