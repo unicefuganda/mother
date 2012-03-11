@@ -1,5 +1,6 @@
 #!  /usr/bin/env python
 # vim: ts=2
+# encoding: UTF-8
 # Thread the sending of messages.
 from datetime import datetime, timedelta
 import itertools
@@ -9,12 +10,7 @@ from rapidsms.models import Contact, Connection, Backend
 from rapidsms_httprouter.models import Message
 from rapidsms.messages.outgoing import OutgoingMessage
 from script.models import ScriptProgress, Script
-
-OUTGOING_MESSAGES = {
-  1: {
-    1: 'Congratulations on your pregnancy! Have you gone to the clinic? You should be checked at least 4 times at a health centre to ensure a healthy pregnancy/baby.'
-  }
-}
+from .reminders import OUTGOING_MESSAGES
 
 class Command(BaseCommand):
   @transaction.commit_manually
