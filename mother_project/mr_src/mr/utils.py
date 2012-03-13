@@ -137,7 +137,7 @@ def init_autoreg(sender, **kwargs):
                 user=user,
                 type=Poll.TYPE_NUMERIC,
                 name='mrs_mensesweeks',
-                question='Thank you! How many weeks since your the last menses?',
+                question='Thank you! How long ago was the last menses? Please reply with the number of weeks that have passed since the last menses.',
                 default_response=''
             ),
             order=1,
@@ -153,7 +153,7 @@ def init_autoreg(sender, **kwargs):
                 user=user,
                 type=Poll.TYPE_NUMERIC,
                 name='mrs_anc_visits',
-                question="You've almost finished! One last question: how many times did you visit the clinic during pregnancy? Please reply with the number of visits you have made.",
+                question="You're almost done! One last question: how many times did you visit the clinic during pregnancy? Please reply with the number of visits you have made.",
                 default_response=''
             ),
             order=2,
