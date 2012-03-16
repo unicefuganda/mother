@@ -38,7 +38,7 @@ SELECT * FROM rapidsms_contact WHERE
   (last_menses + ('%d WEEK %d DAY' :: INTERVAL)) :: DATE = NOW() :: DATE''' % (week, day)):
           mother_queue.put((mother.connection, this_day))
         senders       = []
-        for _ in range(os.getenv('SENDER_THREADS', 10))
+        for _ in range(os.getenv('SENDER_THREADS', 10)):
           sdr = Sender(mother_queue)
           sdr.start()
           senders.append(sdr)

@@ -37,7 +37,7 @@ SELECT * FROM rapidsms_contact WHERE
   (last_menses + ('59 WEEK' :: INTERVAL)) :: DATE > NOW() :: DATE''' % (week,)):
           mother_queue.put((mother.connection, 'If you want to stop receiving FREE messages from the healthy mothers group please reply with STOP.'))
         senders       = []
-        for _ in range(os.getenv('SENDER_THREADS', 10))
+        for _ in range(os.getenv('SENDER_THREADS', 10)):
           sdr = Sender(mother_queue)
           sdr.start()
           senders.append(sdr)

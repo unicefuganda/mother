@@ -1,2 +1,1 @@
 * * * * * root /var/www/env/prod/bin/python /var/www/prod/mother/mother_project/manage.py check_script_progress -e 7 -l 20
-
