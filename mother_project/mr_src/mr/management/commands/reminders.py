@@ -7,7 +7,7 @@ OUTGOING_MESSAGES = {
     1: 'Congratulations on your pregnancy! Have you gone to the clinic? You should be checked at least 4 times at a health centre to ensure a healthy pregnancy/baby.',
     3: 'Have you told someone you trust about your pregnancy? Tell your partner, a friend or family member early on so that they can support you.',
     5: 'Do you know your HIV status? Mothers can prevent their babies from being infected with HIV by taking action. Visit a health centre with your partner for testing'
-  }
+  },
 
 
 

@@ -16,6 +16,7 @@ import threading
 
 class Sender(threading.Thread):
   def __init__(self, mums):
+    super(Sender, self).__init__()
     self.mothers = mums
 
   def run(self):
@@ -26,7 +27,6 @@ class Sender(threading.Thread):
       self.mothers.task_done()
 
 class Command(BaseCommand):
-  @transaction.commit_manually
   def handle(self, **options):
     for week in OUTGOING_MESSAGES.keys():
       this_week = OUTGOING_MESSAGES[week]
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         mother_queue  = Queue.Queue()
         for mother in Contact.objects.raw('''
 SELECT * FROM rapidsms_contact WHERE
-  (last_menses + ('59 WEEK' :: INTERVAL)) :: DATE > NOW() :: DATE''' % (week,)):
+  (last_menses + ('59 WEEK' :: INTERVAL)) :: DATE > NOW() :: DATE'''):
           mother_queue.put((mother.connection, 'If you want to stop receiving FREE messages from the healthy mothers group please reply with STOP.'))
         senders       = []
         for _ in range(os.getenv('SENDER_THREADS', 10)):

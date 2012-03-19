@@ -16,6 +16,7 @@ import threading
 
 class Sender(threading.Thread):
   def __init__(self, mums):
+    super(Sender, self).__init__()
     self.mothers = mums
 
   def run(self):
@@ -26,7 +27,6 @@ class Sender(threading.Thread):
       self.mothers.task_done()
 
 class Command(BaseCommand):
-  @transaction.commit_manually
   def handle(self, **options):
     for week in OUTGOING_MESSAGES.keys():
       this_week = OUTGOING_MESSAGES[week]
