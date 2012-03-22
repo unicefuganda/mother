@@ -1,13 +1,4 @@
 1.  CSV export
-2.  Health workers view (ordered by district, (groups of) clinics).
-3.  Clinic display
-4.  Unit tests.
-
-
-- How to turn a Location into a Point instance?
-
-- How to get at `message.db_message` in tests?
-./utils.py:        #   TODO: Is this even legal in this country?
-./utils.py:        #   TODO: Tell Marcus the dox need to change to reflect this.
-./utils.py:                    #   TODO: Turn location into a Point.
-./app.py:                #   I want to use the original message.text downstairs.  XXX
+2.  Cleaner cronjob queries.
+3.  Full C(RU)D for ReminderMessage.
+4.  Make cronjob work.
