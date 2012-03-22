@@ -12,7 +12,6 @@ from rapidsms_httprouter.models import Message
 from rapidsms.messages.outgoing import OutgoingMessage
 from mr.models import ReminderMessage
 from script.models import ScriptProgress, Script
-import threading
 
 class Command(BaseCommand):
   def handle(self, **options):
