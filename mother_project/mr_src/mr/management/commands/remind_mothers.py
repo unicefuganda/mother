@@ -25,6 +25,6 @@ class Command(BaseCommand):
         # Because Django ORM speaks pidgin: “today” will be encoded as “between end of yesterday and start of tomorrow”. Hahaha. As long as it is not SQL.
         back_then = datetime.now() - timedelta(weeks = week, days = day)
         prior_day = back_then - timedelta(days = 1)
-        for mother in Contact.objects.filter(last_menses__range = (back_then, prior_day)):
+        for mother in Contact.objects.filter(last_menses__range = (prior_day, back_then)):
           msg = Message(connection = mother.connection, status = 'Q', direction = 'O', text = this_day)
           msg.save()
