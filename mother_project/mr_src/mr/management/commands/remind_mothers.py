@@ -22,6 +22,7 @@ class Command(BaseCommand):
       for day in this_week.keys():
         mother_queue  = Queue.Queue()
         this_day      = this_week[day]
-        for mother in Contact.objects.filter(last_menses__range = (datetime.now() - timedelta(weeks = week, days = day), datetime.now())):
+        # for mother in Contact.objects.filter(last_menses__range = (datetime.now() - timedelta(weeks = week, days = day), datetime.now())):
+        for mother in Contact.objects.raw('''SELECT * FROM rapidsms_contact WHERE (last_menses + ('%d WEEK %d DAY' :: INTERVAL)) :: DATE = NOW() :: DATE''' % (week, day)):
           msg = Message(connection = mother.connection, status = 'Q', direction = 'O', text = this_day)
           msg.save()
