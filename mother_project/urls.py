@@ -14,7 +14,9 @@ from generic.sorters import SimpleSorter
 from rapidsms_httprouter.models import Message
 from contact.forms import FreeSearchTextForm, FreeSearchForm, DistictFilterMessageForm, ReplyTextForm, DistictFilterForm, MassTextForm
 from contact.views import view_message_history
-from mr.views import view_mother
+from mr.forms import ReminderMessageForm
+from mr.views import view_mother, delete_reminder
+from mr.models import ReminderMessage
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.generic.simple import direct_to_template
@@ -34,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^$', direct_to_template, {'template': 'mr/index.html'}, name="rapidsms-dashboard"),
     url('^accounts/login', 'rapidsms.views.login'),
     url('^accounts/logout', 'rapidsms.views.logout'),
+    url(r'^deletereminder/$', delete_reminder),
     # RapidSMS contrib app URLs
     url(r'^contact/messagelog/$', login_required(generic), {
       'model':Message,
@@ -82,6 +85,21 @@ urlpatterns = patterns('',
         'sort_column':'name',
         'sort_ascending':True,
     }, name="hw-contact"),
+    url(r'^reminders/$', login_required(generic), {
+        'model':ReminderMessage,
+        'results_title':'Reminders',
+        'action_forms':[ReminderMessageForm],
+        'objects_per_page':25,
+        'partial_row':'mr/partials/reminder_row.html',
+        'columns':[
+    ('Week',          True, 'week_number',    SimpleSorter()),
+    ('Day',           True, 'day_number',     SimpleSorter()),
+    ('Message Text',  True, 'reminder_text',  SimpleSorter()),
+    ('',  False, None, SimpleSorter())
+                 ],
+        'sort_column':'week_number',
+        'sort_ascending':True,
+    }, name="reminders"),
     url(r'^clinic/$', login_required(generic), {
         'model':HealthFacility,
         'results_title':'Health Facility',
