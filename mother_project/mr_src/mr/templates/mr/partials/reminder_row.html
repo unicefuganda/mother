@@ -1,0 +1,7 @@
+{% extends 'generic/partials/partial_row.html' %}
+{% block remaining_row_content %}
+<td>{{ object.week_number }}</td>
+<td>{{ object.day_number }}</td>
+<td>{{ object.reminder_text }}</td>
+<td><a href="javascript: alert('Coming soon to a cinema near me.');">Delete</a></td>
+{% endblock %}

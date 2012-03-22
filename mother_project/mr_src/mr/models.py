@@ -13,6 +13,22 @@ from django.db import models
 post_syncdb.connect(init_structures, weak=False)
 script_progress_was_completed.connect(mr_autoreg, weak=False)
 
+class ReminderMessage(models.Model):
+  week_number   = models.IntegerField()
+  day_number    = models.IntegerField()
+  reminder_text = models.TextField()
+
+  @classmethod
+  def as_hash(self):
+    ans = {}
+    for rm in self.objects.all():
+      week  = ans.get(rm.week_number)
+      if not week:
+        week  = {}
+        ans[rm.week_number] = week
+      week[rm.day_number] = rm.reminder_text
+    return ans
+
 class Questionnaire(models.Model):
     health_worker       = models.ForeignKey(HealthProvider)
     first_anc_visit     = models.IntegerField()
