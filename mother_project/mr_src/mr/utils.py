@@ -121,13 +121,13 @@ def init_autoreg(sender, **kwargs):
                 user=user, \
                 type=Poll.TYPE_LOCATION, \
                 name='mrs_location',
-                question="Thank you for joining the healthy mothers group, all messages FREE! From which district are you? Please reply with the name of your district.",
+                question="Thank you for joining Mother Reminder - a great way for fathers and mothers to get the information they need to have a healthy baby. All messages FREE!",
                 default_response='', \
             ),
             order=0,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
-            retry_offset=86400,
+            retry_offset=3600,
             num_tries=2,
             giveup_offset=86400,
         ))
@@ -143,7 +143,7 @@ def init_autoreg(sender, **kwargs):
             order=1,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
-            retry_offset=86400,
+            retry_offset=3600,
             num_tries=2,
             giveup_offset=86400,
         ))
@@ -159,7 +159,7 @@ def init_autoreg(sender, **kwargs):
             order=2,
             rule=ScriptStep.STRICT_MOVEON,
             start_offset=0,
-            retry_offset=86400,
+            retry_offset=3600,
             num_tries=2,
             giveup_offset=86400,
         ))
@@ -192,7 +192,7 @@ def init_autoreg(sender, **kwargs):
             order         = 1,
             rule          = ScriptStep.STRICT_MOVEON,
             start_offset  = 0,
-            retry_offset  = 86400,
+            retry_offset  = 3600,
             num_tries     = 1,
             giveup_offset = 86400
         ))
@@ -205,7 +205,7 @@ def init_autoreg(sender, **kwargs):
             order           = 2,
             rule            = ScriptStep.STRICT_MOVEON,
             start_offset    = 0,
-            retry_offset    = 86400,
+            retry_offset    = 3600,
             num_tries       = 1,
             giveup_offset   = 86400
         ))
@@ -218,7 +218,7 @@ def init_autoreg(sender, **kwargs):
               order = 3,
                rule = ScriptStep.STRICT_MOVEON,
        start_offset = 0,
-       retry_offset = 86400,
+       retry_offset = 3600,
           num_tries = 1,
       giveup_offset = 86400
         ))
@@ -232,8 +232,8 @@ def init_autoreg(sender, **kwargs):
             order           =   4,
             rule            =   ScriptStep.RESEND_MOVEON,
             num_tries       =   1,
-            start_offset    =   60,
-            retry_offset    =   86400,
+            start_offset    =   0,
+            retry_offset    =   3600,
             giveup_offset   =   86400
         ))
         script.steps.add(ScriptStep.objects.create(
@@ -241,7 +241,7 @@ def init_autoreg(sender, **kwargs):
             message="You successfully registered as a Health Worker with Mother Reminder. You will be occasionally asked to provide certain information.",
             order=5,
             rule=ScriptStep.WAIT_MOVEON,
-            start_offset=60,
+            start_offset=0,
             giveup_offset=0,
         ))
         if 'django.contrib.sites' in settings.INSTALLED_APPS:
@@ -312,7 +312,7 @@ def init_autoreg(sender, **kwargs):
             message="Thank you for sending us that information.",
             order=4,
             rule=ScriptStep.WAIT_MOVEON,
-            start_offset=60,
+            start_offset=0,
             giveup_offset=0,
         ))
         if 'django.contrib.sites' in settings.INSTALLED_APPS:
