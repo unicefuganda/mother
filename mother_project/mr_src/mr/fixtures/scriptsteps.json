@@ -1,0 +1,517 @@
+[
+  {
+    "pk": "mrs_autoreg", 
+    "model": "script.script", 
+    "fields": {
+      "enabled": true, 
+      "name": "Mother reminder autoregistration script", 
+      "sites": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": "mrs_hw_autoreg", 
+    "model": "script.script", 
+    "fields": {
+      "enabled": true, 
+      "name": "Health worker auto-registration script.", 
+      "sites": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": "mrs_hw_reminder", 
+    "model": "script.script", 
+    "fields": {
+      "enabled": true, 
+      "name": "Health worker reminder script.", 
+      "sites": [
+        1
+      ]
+    }
+  }, 
+  {
+    "pk": "ureport_autoreg", 
+    "model": "script.script", 
+    "fields": {
+      "enabled": true, 
+      "name": "uReport autoregistration script", 
+      "sites": []
+    }
+  }, 
+  {
+    "pk": "mrs_opt_out", 
+    "model": "script.script", 
+    "fields": {
+      "enabled": true, 
+      "name": "General opt-out script", 
+      "sites": []
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 0, 
+      "message": "Welcome to the Mother Reminder registration. Please answer the questions in the following messages.", 
+      "poll": null, 
+      "order": 0, 
+      "giveup_offset": 60
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 1, 
+      "order": 1, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 2, 
+      "order": 2, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 3, 
+      "order": 3, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 4, 
+      "order": 4, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 60, 
+      "message": "", 
+      "poll": 5, 
+      "order": 5, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "You successfully registered the pregnancy with Mother Reminder.You will be sent important information about your pregnancy and reminders for checkups.", 
+      "poll": null, 
+      "order": 6, 
+      "giveup_offset": 0
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 0, 
+      "message": "Welcome to the Health Worker registration for Mother Reminder. Please answer the questions in the following messages.", 
+      "poll": null, 
+      "order": 0, 
+      "giveup_offset": 60
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 6, 
+      "order": 1, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 7, 
+      "order": 2, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 8, 
+      "order": 3, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 60, 
+      "message": "", 
+      "poll": 9, 
+      "order": 4, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "You successfully registered as a Health Worker with Mother Reminder. You will be occasionally asked to provide certain information.", 
+      "poll": null, 
+      "order": 5, 
+      "giveup_offset": 0
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_reminder", 
+      "retry_offset": 172800, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 7, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 10, 
+      "order": 0, 
+      "giveup_offset": 1296000
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_reminder", 
+      "retry_offset": 172800, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 7, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 11, 
+      "order": 1, 
+      "giveup_offset": 1296000
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_reminder", 
+      "retry_offset": 172800, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 7, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 12, 
+      "order": 2, 
+      "giveup_offset": 1296000
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_reminder", 
+      "retry_offset": 172800, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 7, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 13, 
+      "order": 3, 
+      "giveup_offset": 1296000
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_hw_reminder", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "Thank you for sending us that information.", 
+      "poll": null, 
+      "order": 4, 
+      "giveup_offset": 0
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 0, 
+      "message": "Welcome to Ureport, where you can SPEAK UP and BE HEARD on what is happening in your community-it's FREE! ", 
+      "poll": null, 
+      "order": 0, 
+      "giveup_offset": 60
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 14, 
+      "order": 1, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "Ureport is a FREE SMS text message system that is sent to your phone.  Ureport is sponsored by UNICEF and other partners.", 
+      "poll": null, 
+      "order": 2, 
+      "giveup_offset": 60
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 15, 
+      "order": 3, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "Ureport gives you a chance to speak out on issues in your community & share opinions with youth around Uganda!Best responses&results shared through the media!", 
+      "poll": null, 
+      "order": 4, 
+      "giveup_offset": 60
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 60, 
+      "message": "", 
+      "poll": 16, 
+      "order": 5, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "M", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 60, 
+      "message": "", 
+      "poll": 17, 
+      "order": 6, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 60, 
+      "message": "", 
+      "poll": 18, 
+      "order": 7, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": 86400, 
+      "rule": "R", 
+      "email": null, 
+      "num_tries": 1, 
+      "start_offset": 0, 
+      "message": "", 
+      "poll": 19, 
+      "order": 8, 
+      "giveup_offset": 86400
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "ureport_autoreg", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 60, 
+      "message": "CONGRATULATIONS!!! You are now a registered member of Ureport! With Ureport, you can make a real difference!  Speak Up and Be Heard! from UNICEF", 
+      "poll": null, 
+      "order": 9, 
+      "giveup_offset": 0
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "script.scriptstep", 
+    "fields": {
+      "script": "mrs_opt_out", 
+      "retry_offset": null, 
+      "rule": "w", 
+      "email": null, 
+      "num_tries": null, 
+      "start_offset": 0, 
+      "message": "You will not receive any more messages. Thanks anyway.", 
+      "poll": null, 
+      "order": 0, 
+      "giveup_offset": 60
+    }
+  }
+]
