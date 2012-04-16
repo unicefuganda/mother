@@ -35,7 +35,7 @@ class App (AppBase):
           # ScriptProgress.objects.create(
           #     script = Script.objects.get(slug = escargot),
           # connection = message.connection)
-          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You will no longer receive FREE messages from the healthy mothers group. If you want to join again please send JOIN to 6400.')
+          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.')
           msg.save()
           return False
         if (not message.connection.contact) or (not ScriptProgress.objects.filter(connection = message.connection)):
