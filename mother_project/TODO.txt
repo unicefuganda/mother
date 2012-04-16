@@ -1,5 +1,3 @@
-Improved user experience – refine registration timings and immediate set of messages before schedule begins.
-
 Wording for registration and welcome have been updated to make them gender neutral and use “Mother Reminder” rather than “Healthy Mothers Group.” See excel spreadsheet.
 
 Auto response to any incoming message – need to respond, even if at first we do not do anything with the incoming messages. Added a potential auto-response to message excel spreadsheet. Potential to have a pool of generic responses containing different medical messages.

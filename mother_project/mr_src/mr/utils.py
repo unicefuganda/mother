@@ -103,7 +103,7 @@ def init_autoreg(sender, **kwargs):
     if created:
         script.steps.add(ScriptStep.objects.create(
             script=script,
-            message="You will no longer receive FREE messages from the healthy mothers group. If you want to join again please send JOIN to 6400.",
+            message="You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.",
             order=0,
             rule=ScriptStep.WAIT_MOVEON,
             start_offset=0,

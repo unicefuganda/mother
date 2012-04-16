@@ -47,7 +47,7 @@ class App (AppBase):
                     script = Script.objects.get(slug = escargot),
                 connection = message.connection)
             return False
-        elif match and re.match(matched, 'mrs_autoreg', re.IGNORECASE):
+        elif match and escargot == 'mrs_autoreg':
           msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You are already a member of Mother Reminder. To restart, first send QUIT. Thank you!')
           msg.save()
         return False
