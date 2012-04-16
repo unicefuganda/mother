@@ -19,7 +19,7 @@ class App (AppBase):
         escargot = 'mrs_autoreg'
         match    = None
         for keywd in settings.KEYWORDS_AND_SLUGS:
-            match = re.match(keywd, message.text)
+            match = re.match(keywd, message.text, re.IGNORECASE)
             if match:
                 escargot     = settings.KEYWORDS_AND_SLUGS[keywd]
                 message.text = message.text[len(match.group(0)):]
@@ -45,7 +45,7 @@ class App (AppBase):
                     script = Script.objects.get(slug = escargot),
                 connection = message.connection)
             return False
-        elif match and re.match(settings.KEYWORDS_AND_SLUGS['mrs_autoreg'], match.group(0)):
+        elif match and re.match(settings.KEYWORDS_AND_SLUGS['mrs_autoreg'], match.group(0), re.IGNORECASE):
           msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You are already a member of Mother Reminder. To restart, first send QUIT. Thank you!')
           msg.save()
         return False
