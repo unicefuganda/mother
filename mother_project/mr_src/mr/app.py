@@ -2,6 +2,7 @@ from rapidsms.apps.base import AppBase
 from django.conf import settings
 from script.models import Script, ScriptProgress
 from rapidsms.models import Contact, Connection
+from rapidsms_httprouter.models import Message
 from datetime import datetime, timedelta
 import re
 
