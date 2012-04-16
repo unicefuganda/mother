@@ -8,8 +8,6 @@ Refinements to registration timing – Added immediately welcome message, ask ne
 
 Added clarification question if district cannot be matched by system.
 
-Accept unsubscribe requests with the words: stop, quit, unsub, unsubscribe, deactivate.
-
 There should be an immediate response when a quit request is processed – no delay and this should not go through the normal time filter (so if someone quits at 4am they get an immediate response).
 
 Need to check how the message schedule begins – if there is a significant delay between the final registration step and the first health message we should build in a message or two that can be sent in the meantime.
@@ -19,4 +17,3 @@ Get message schedule working!
 GUI improvements – I suggest Revence & Moses/Sam sit down and go through the GUI of U-Report to see what’s possible and maybe borrow some code.
 
 Better search/filter function for mothers and messages. Filter by district, search for number etc. Search incoming messages with free-form text.
-
