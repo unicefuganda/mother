@@ -16,6 +16,7 @@ class App (AppBase):
 
     def handle (self, message):
         escargot = 'mrs_autoreg'
+        match    = None
         for keywd in settings.KEYWORDS_AND_SLUGS:
             match = re.match(keywd, message.text)
             if match:
@@ -28,9 +29,11 @@ class App (AppBase):
             return False
           sps = ScriptProgress.objects.filter(connection = message.connection)
           sps.delete()
-          ScriptProgress.objects.create(
-              script = Script.objects.get(slug = escargot),
-          connection = message.connection)
+          # ScriptProgress.objects.create(
+          #     script = Script.objects.get(slug = escargot),
+          # connection = message.connection)
+          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You will no longer receive FREE messages from the healthy mothers group. If you want to join again please send JOIN to 6400.')
+          msg.save()
           return False
         if (not message.connection.contact) or (not ScriptProgress.objects.filter(connection = message.connection)):
             message.connection.contact = Contact.objects.create(name='Anonymous User')
@@ -40,5 +43,8 @@ class App (AppBase):
             ScriptProgress.objects.create(
                     script = Script.objects.get(slug = escargot),
                 connection = message.connection)
-            return True
+            return False
+        elif match and re.match(settings.KEYWORDS_AND_SLUGS['mrs_autoreg'], match.group(0)):
+          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You are already a member of Mother Reminder. To restart, first send QUIT. Thank you!')
+          msg.save()
         return False
