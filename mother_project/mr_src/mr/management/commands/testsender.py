@@ -47,4 +47,8 @@ class Command(BaseCommand):
     con, _ = Connection.objects.get_or_create(identity  = options.get('num', '256772344681'),
                                             backend  = Backend.objects.get_or_create(name = 'TestBackend')[0])
     r   = get_router()
+    lp  = Message.objects.order_by('-pk')[0].pk
     r.handle_incoming(con.backend.name, con.identity, options.get('text', 'EMPTY'))
+    for m in Message.objects.filter(pk__gt = lp):
+      print m
+      print '==' * 12
