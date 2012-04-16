@@ -51,6 +51,7 @@ INSTALLED_BACKENDS = {
 # by default. you may wish to remove some and/or add your own.
 INSTALLED_APPS = [
 
+    "mr",
     # the essentials.
     "django_nose",
     "djtables",
@@ -73,7 +74,6 @@ INSTALLED_APPS = [
     "rapidsms.contrib.locations.nested",
     "eav",
     "unregister",
-    "mr",
     "rapidsms_xforms",
     "healthmodels",
     "rapidsms_httprouter",
@@ -186,6 +186,7 @@ TEMPLATE_LOADERS = (
 ROOT_URLCONF = "urls"
 
 SOUTH_TESTS_MIGRATE = False
+CACHE_MIDDLEWARE_SECONDS    =   0
 
 # since we might hit the database from any thread during testing, the
 # in-memory sqlite database isn't sufficient. it spawns a separate
