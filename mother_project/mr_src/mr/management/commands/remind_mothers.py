@@ -1,6 +1,6 @@
 #!  /usr/bin/env python
-# vim: ts=2
 # encoding: UTF-8
+# vim: ts=2
 from datetime import datetime, timedelta
 import itertools
 from django.db.models import Q
