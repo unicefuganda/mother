@@ -47,6 +47,7 @@ class Command(BaseCommand):
       while True:
         try:
           x, y, week, day, z, a, b, text, c, d = f.readline().split('\t')
+          text  = text[1:-1]
           rm  = None
           try:
             rm  = ReminderMessage.objects.get(week_number = int(week),
