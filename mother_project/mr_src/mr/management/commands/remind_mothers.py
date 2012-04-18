@@ -31,7 +31,13 @@ class Command(BaseCommand):
           continue
         sys.stderr.write('Sending (for week %d, day %d):\n%s\n\nTo %s mothers between %s and %s.\n' % (week, day, this_day, mothers.count(), prior_day.strftime('%d-%m-%Y'), back_then.strftime('%d-%m-%y')))
         for mother in mothers:
-          sys.stderr.write('%s (%s)\n' % (mother.default_connection.identity, mother.last_menses.strftime('%d-%m-%Y')))
-          msg = Message(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
-          msg.save() or sys.stderr.write('FAILED.\n')
+          msg = Message.objects.create(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
+          # msg.save() or sys.stderr.write('FAILED.\n')
+          if msg:
+            sys.stderr.write('%s (%s)\n' % (mother.default_connection.identity, mother.last_menses.strftime('%d-%m-%Y')))
+          else:
+            if sys.stderr.isatty():
+              sys.stderr.write('FAILED.\n') # Colorise?
+            else:
+              sys.stderr.write('FAILED.\n')
         sys.stderr.write('\n' + ('==' * 12) + '\n')
