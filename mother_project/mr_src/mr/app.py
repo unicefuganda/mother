@@ -48,6 +48,6 @@ class App (AppBase):
                 connection = message.connection)
             return False
         elif match and escargot == 'mrs_autoreg':
-          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You are already a member of Mother Reminder. To restart, first send QUIT. Thank you!')
+          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You are already registered with Mother Reminder and will receive free health info. Reply with STOP to leave Mother Reminder. Re-join by sending JOIN to 6400.')
           msg.save()
         return False
