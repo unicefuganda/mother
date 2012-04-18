@@ -6,6 +6,7 @@ import itertools
 from django.db.models import Q
 from django.core.management.base import BaseCommand
 import os
+import sys
 import Queue
 from rapidsms.models import Contact, Connection, Backend
 from rapidsms_httprouter.models import Message
@@ -25,6 +26,12 @@ class Command(BaseCommand):
         # Because Django ORM speaks pidgin: “today” will be encoded as “between end of yesterday and start of tomorrow”. Hahaha. As long as it is not SQL.
         back_then = datetime.now() - timedelta(weeks = week, days = day)
         prior_day = back_then - timedelta(days = 1)
+        mothers   = Contact.objects.filter(last_menses__range = (prior_day, back_then)).exclude(connection = None)
+        if not mothers.count():
+          continue
+        sys.stderr.write('Sending:\n%s\n\nTo mothers %d between %s and %s.\n' % (this_day, mothers.count(), prior_day.strftime('%d-%m-%Y'), back_then.strftime('%d-%m-%y')))
         for mother in Contact.objects.filter(last_menses__range = (prior_day, back_then)).exclude(connection = None):
+          sys.stderr.write('%s ' % (mother.default_connection.identity,))
           msg = Message(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
           msg.save()
+        sys.stderr.write('\n')
