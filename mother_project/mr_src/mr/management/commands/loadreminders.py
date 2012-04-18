@@ -58,6 +58,6 @@ class Command(BaseCommand):
                                   reminder_text = text)
           rm.save()
         except ValueError:
-          pass
+          break
         except StopIteration:
           break
