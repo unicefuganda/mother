@@ -26,5 +26,5 @@ class Command(BaseCommand):
         back_then = datetime.now() - timedelta(weeks = week, days = day)
         prior_day = back_then - timedelta(days = 1)
         for mother in Contact.objects.filter(last_menses__range = (prior_day, back_then)):
-          msg = Message(connection = mother.connection, status = 'Q', direction = 'O', text = this_day)
+          msg = Message(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
           msg.save()
