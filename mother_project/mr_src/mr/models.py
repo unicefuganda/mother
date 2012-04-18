@@ -18,6 +18,9 @@ class ReminderMessage(models.Model):
   day_number    = models.IntegerField()
   reminder_text = models.TextField()
 
+  def __unicode__(self):
+    return u'Week %d, Day %d: "%s"' % (self.week_number, self.day_number, self.reminder_text)
+
   @classmethod
   def as_hash(self):
     ans = {}

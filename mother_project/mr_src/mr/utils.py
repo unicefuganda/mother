@@ -134,11 +134,11 @@ def init_autoreg(sender, **kwargs):
             default_response='', \
         ),
         order=0,
-        rule=ScriptStep.STRICT_MOVEON,
+        rule=ScriptStep.WAIT_MOVEON,
         start_offset=0,
         retry_offset=3600,
         num_tries=2,
-        giveup_offset=86400,
+        giveup_offset=120,
     ))
     script.steps.add(ScriptStep.objects.create(
         script=script,
