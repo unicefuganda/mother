@@ -33,5 +33,5 @@ class Command(BaseCommand):
         for mother in mothers:
           sys.stderr.write('%s (%s)\n' % (mother.default_connection.identity, mother.last_menses.strftime('%d-%m-%Y')))
           msg = Message(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
-          msg.save()
+          msg.save() or sys.stderr.write('FAILED.\n')
         sys.stderr.write('\n' + ('==' * 12) + '\n')
