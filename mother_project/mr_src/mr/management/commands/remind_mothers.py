@@ -29,9 +29,9 @@ class Command(BaseCommand):
         mothers   = Contact.objects.filter(last_menses__range = (prior_day, back_then)).exclude(connection = None)
         if not mothers.count():
           continue
-        sys.stderr.write('Sending:\n%s\n\nTo mothers %d between %s and %s.\n' % (this_day, mothers.count(), prior_day.strftime('%d-%m-%Y'), back_then.strftime('%d-%m-%y')))
-        for mother in Contact.objects.filter(last_menses__range = (prior_day, back_then)).exclude(connection = None):
-          sys.stderr.write('%s ' % (mother.default_connection.identity,))
+        sys.stderr.write('Sending (for week %d, day %d):\n%s\n\nTo %s mothers between %s and %s.\n' % (week, day, this_day, mothers.count(), prior_day.strftime('%d-%m-%Y'), back_then.strftime('%d-%m-%y')))
+        for mother in mothers:
+          sys.stderr.write('%s (%s)\n' % (mother.default_connection.identity, mother.last_menses.strftime('%d-%m-%Y')))
           msg = Message(connection = mother.default_connection, status = 'Q', direction = 'O', text = this_day)
           msg.save()
-        sys.stderr.write('\n')
+        sys.stderr.write('\n' + ('==' * 12) + '\n')
