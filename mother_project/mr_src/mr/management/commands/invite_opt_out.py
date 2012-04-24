@@ -19,8 +19,8 @@ class Command(BaseCommand):
     outmsgs.sort()
     try:
       lastweek  = outmsgs[-1]
-      for mother in Contact.objects.filter(last_menses__lt = (datetime.now() - timedelta(weeks = lastweek))).exclude(connection = None):
-        msg = Message.objects.create(connection = mother.default_connection, direction = 'O', status = 'Q', text = 'If you want to stop receiving FREE messages from the healthy mothers group please reply with STOP.')
+      for mother in Contact.objects.filter(interested = True, last_menses__lt = (datetime.now() - timedelta(weeks = lastweek))).exclude(connection = None):
+        msg = Message.objects.create(connection = mother.default_connection, direction = 'O', status = 'Q', text = 'If you want to stop receiving FREE messages from Mother Reminder please reply with STOP.')
         # msg.save()
         # application, batch, connection, date, direction, flags, id, in_response_to, poll, poll_responses, priority, responses, status, submissions, text
     except IndexError:

@@ -60,7 +60,7 @@ def mr_autoreg(**kwargs):
         facility = HealthFacility(
                     #   TODO: Turn location into a Point.
                     #   location  = contact.reporting_location,
-                        #   type  = facility_type,
+                    #       type  = facility_type,
                         name  = find_best_response(session, hc_poll))
         contact.facility = facility
         contact.save()
@@ -85,7 +85,6 @@ def mr_autoreg(**kwargs):
         questionnaire.save()
 
 required_models = ['eav.models', 'poll.models', 'script.models', 'django.contrib.auth.models']
-
 def init_structures(sender, **kwargs):
     global required_models
     if not required_models:
@@ -136,9 +135,23 @@ def init_autoreg(sender, **kwargs):
         order=0,
         rule=ScriptStep.WAIT_MOVEON,
         start_offset=0,
+        giveup_offset=120,
+    ))
+    script.steps.add(ScriptStep.objects.create(
+        script=script,
+        poll=Poll.objects.create(
+            user=user, \
+            type=Poll.TYPE_LOCATION, \
+            name='mrs_location',
+            question="Time to answer a few questions from Mother Reminder! Your response is FREE! From which district are you? Please reply with the name of your district only.",
+            default_response='', \
+        ),
+        order=1,
+        rule=ScriptStep.WAIT_MOVEON,
+        start_offset=0,
         retry_offset=3600,
         num_tries=2,
-        giveup_offset=120,
+        giveup_offset=3600 * 2,
     ))
     script.steps.add(ScriptStep.objects.create(
         script=script,
@@ -146,23 +159,7 @@ def init_autoreg(sender, **kwargs):
             user=user,
             type=Poll.TYPE_NUMERIC,
             name='mrs_mensesweeks',
-            question='Thank you! How long ago was the last menses? Please reply with the number of weeks that have passed since the last menses.',
-            default_response=''
-        ),
-        order=1,
-        rule=ScriptStep.STRICT_MOVEON,
-        start_offset=0,
-        retry_offset=3600,
-        num_tries=2,
-        giveup_offset=86400,
-    ))
-    script.steps.add(ScriptStep.objects.create(
-        script=script,
-        poll=Poll.objects.create(
-            user=user,
-            type=Poll.TYPE_NUMERIC,
-            name='mrs_anc_visits',
-            question="You're almost done! One last question: how many times did you visit the clinic during pregnancy? Please reply with the number of visits you have made.",
+            question="Hello again from Mother Reminder! How long ago was the mother's last menses? Please reply with the number of weeks that have passed since the last menses.",
             default_response=''
         ),
         order=2,
@@ -170,13 +167,29 @@ def init_autoreg(sender, **kwargs):
         start_offset=0,
         retry_offset=3600,
         num_tries=2,
-        giveup_offset=86400,
+        giveup_offset=3600 * 2,
     ))
     script.steps.add(ScriptStep.objects.create(
         script=script,
-        message='Thank you for answering all the questions. You will now receive weekly information about keeping a healthy lifestyle for you and your child, all messages FREE!',
-        rule=ScriptStep.WAIT_MOVEON,
+        poll=Poll.objects.create(
+            user=user,
+            type=Poll.TYPE_NUMERIC,
+            name='mrs_anc_visits',
+            question="You are almost there! One last question, how many times has the mother gone to the clinic during pregnancy? Please reply with the number of visits.",
+            default_response=''
+        ),
         order=3,
+        rule=ScriptStep.STRICT_MOVEON,
+        start_offset=0,
+        retry_offset=3600,
+        num_tries=2,
+        giveup_offset=3600 * 2,
+    ))
+    script.steps.add(ScriptStep.objects.create(
+        script=script,
+        message='Thank you! You will now receive health information on your phone to help you and your family stay happy and healthy during pregnancy! All messages FREE!',
+        rule=ScriptStep.WAIT_MOVEON,
+        order=4,
         start_offset=0
     ))
     script = None
