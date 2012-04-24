@@ -32,6 +32,8 @@ class App (AppBase):
             return False
           sps = ScriptProgress.objects.filter(connection = message.connection)
           sps.delete()
+          message.connection.contact.interested = False
+          message.connection.contact.save()
           # ScriptProgress.objects.create(
           #     script = Script.objects.get(slug = escargot),
           # connection = message.connection)

@@ -9,6 +9,7 @@ class MotherContact(models.Model):
     owns_phone = models.BooleanField(default=True)
     last_menses = models.DateTimeField(null=True)
     anc_visits = models.IntegerField(null=True)
+    interested = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
