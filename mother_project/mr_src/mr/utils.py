@@ -108,7 +108,8 @@ def check_for_validity(progress):
   return False
 
 def validate_district(sender, **kwargs):
-  if sender.step.poll.name != 'mrs_location':
+  thepoll = sender.step.poll
+  if not thepoll or thepoll.name != 'mrs_location':
     return
   if not check_for_validity(sender):
     return
