@@ -107,13 +107,15 @@ def check_for_validity(progress):
   return False
 
 def validate_district(sender, **kwargs):
-  # if sender.step.slug != 'mrs_location':
-  if sender.script.slug != 'mrs_location':
-    return
-  if not check_for_validity(sender):
-    return
-  sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
-  sender.save()
+  try:
+    if sender.script.slug != 'mrs_location':
+      return
+    if not check_for_validity(sender):
+      return
+    sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
+    sender.save()
+  except Exception:
+    print sys.exc_info()
 
 required_models = ['eav.models', 'poll.models', 'script.models', 'django.contrib.auth.models']
 def init_structures(sender, **kwargs):
