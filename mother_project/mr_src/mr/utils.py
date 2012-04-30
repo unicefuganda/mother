@@ -100,9 +100,7 @@ def check_for_validity(progress):
     session       = ScriptSession.objects.filter(script = progress.script, connection = progress.connection, end_time = None)[0]
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
-    print 'Will location work with ', loc, '?'
     if not loc: return False
-    print loc, loc.type
     return loc.type == 'district'
   except IndexError:
     pass
@@ -114,6 +112,7 @@ def validate_district(sender, **kwargs):
     return
   if not check_for_validity(sender):
     return
+  print 'We got a district, and now what?'
   sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
   sender.save()
 
