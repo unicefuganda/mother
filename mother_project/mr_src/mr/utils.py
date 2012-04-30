@@ -112,10 +112,10 @@ def check_for_validity(progress):
 def validate_district(sender, **kwargs):
   print 'validate_district', sender, type(sender), kwargs
   try:
-    print 'validate_district', ('will %s pass with %s?' % (sender.script, sender.script.slug))
-    if sender.script.slug != 'mrs_location':
+    print 'validate_district', ('will %s pass with %s?' % (sender.poll, sender.poll.name))
+    if sender.poll.name != 'mrs_location':
       return
-    print 'validate_district', ('is handling %s' % sender.script.slug)
+    print 'validate_district', ('is handling %s' % sender.poll.name)
     if not check_for_validity(sender):
       return
     sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
@@ -167,7 +167,7 @@ def init_autoreg(sender, **kwargs):
         poll=Poll.objects.create(
             user=user, \
             type=Poll.TYPE_LOCATION, \
-            name='mrs_location',
+            name='mrs_intro',
             question="Thank you for joining Mother Reminder - a great way for fathers and mothers to get the information they need to have a healthy baby. All messages FREE!",
             default_response='', \
         ),
