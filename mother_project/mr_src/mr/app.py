@@ -50,7 +50,7 @@ class App (AppBase):
                     script = Script.objects.get(slug = escargot),
                 connection = message.connection)
             return False
-        else
+        else:
           if ScriptProgress.objects.filter(connection = message.connection):
             return False
           if match and escargot == 'mrs_autoreg':
