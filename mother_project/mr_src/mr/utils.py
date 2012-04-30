@@ -96,33 +96,24 @@ def mr_autoreg(**kwargs):
         questionnaire.save()
 
 def check_for_validity(progress):
-  print 'check_for_validity', ('is to check the validity with %s which is a %s' % (progress, type(progress)))
   step    = progress.script.steps.get(poll__name = 'mrs_location')
   try:
     session       = ScriptSession.objects.filter(connection = progress.connection, end_time = None)[0]
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
     if not loc: return False
-    print 'check_for_validity', ('got location: %s' % loc)
     return loc.type.stub == 'district'
   except IndexError:
-    print 'check_for_validity', sys.exc_info()
     pass
   return False
 
 def validate_district(sender, **kwargs):
-  print 'validate_district', sender, type(sender), kwargs
-  try:
-    print 'validate_district', ('will %s pass with %s?' % (sender.step.poll, sender.step.poll.name))
-    if sender.step.poll.name != 'mrs_location':
-      return
-    print 'validate_district', ('is handling %s' % sender.step.poll.name)
-    if not check_for_validity(sender):
-      return
-    sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
-    sender.save()
-  except Exception:
-    print sys.exc_info()
+  if sender.step.poll.name != 'mrs_location':
+    return
+  if not check_for_validity(sender):
+    return
+  sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
+  sender.save()
 
 required_models = ['eav.models', 'poll.models', 'script.models', 'django.contrib.auth.models']
 def init_structures(sender, **kwargs):
