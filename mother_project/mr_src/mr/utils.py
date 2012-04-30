@@ -102,7 +102,8 @@ def check_for_validity(progress):
   return loc.type.stub == 'district'
 
 def validate_district(sender, **kwargs):
-  if sender.step.slug != 'mrs_location':
+  # if sender.step.slug != 'mrs_location':
+  if sender.script.slug != 'mrs_location':
     return
   if not check_for_validity(sender):
     return
