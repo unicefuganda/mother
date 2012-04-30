@@ -95,6 +95,7 @@ def mr_autoreg(**kwargs):
         questionnaire.save()
 
 def check_for_validity(progress):
+  print 'check_for_validity', ('is to check the validity with %s which is a %s' % (progress, type(progress)))
   step    = progress.script.steps.get(poll__name = 'mrs_location')
   try:
     session       = ScriptSession.objects.filter(connection = progress.connection, end_time = None)[0]
@@ -109,10 +110,11 @@ def check_for_validity(progress):
   return False
 
 def validate_district(sender, **kwargs):
-  print 'validate_district', sender, kwargs
+  print 'validate_district', sender, type(sender), kwargs
   try:
     if sender.script.slug != 'mrs_location':
       return
+    print 'validate_district', ('is handling %s' % sender.script.slug)
     if not check_for_validity(sender):
       return
     sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
