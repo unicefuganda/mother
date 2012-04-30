@@ -4,6 +4,7 @@ from django.db import *
 from .utils import mr_autoreg, init_structures, validate_district
 import datetime
 import re
+import sys
 from poll.models import Poll
 from django.core.exceptions import ValidationError
 from eav.models import Attribute

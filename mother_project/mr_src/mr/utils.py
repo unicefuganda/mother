@@ -9,6 +9,7 @@ from rapidsms.models import Contact
 from rapidsms.contrib.locations.models import Location
 from datetime import *
 from healthmodels.models import HealthProvider, HealthFacility
+import sys
 
 def mr_autoreg(**kwargs):
     connection = kwargs['connection']
