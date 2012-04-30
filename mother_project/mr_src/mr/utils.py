@@ -101,6 +101,7 @@ def check_for_validity(progress):
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
     if not loc: return False
+    print '%s %s' % (loc.type, loc.type == 'district')
     return loc.type == 'district'
   except IndexError:
     pass
@@ -112,7 +113,6 @@ def validate_district(sender, **kwargs):
     return
   if not check_for_validity(sender):
     return
-  print 'We got a district, and now what?'
   sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
   sender.save()
 
