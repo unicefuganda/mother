@@ -112,6 +112,7 @@ def check_for_validity(progress):
 def validate_district(sender, **kwargs):
   print 'validate_district', sender, type(sender), kwargs
   try:
+    print 'validate_district', ('will %s pass with %s?' % (sender.script, sender.script.slug))
     if sender.script.slug != 'mrs_location':
       return
     print 'validate_district', ('is handling %s' % sender.script.slug)
