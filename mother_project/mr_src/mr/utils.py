@@ -101,7 +101,9 @@ def check_for_validity(progress):
     session       = ScriptSession.objects.filter(connection = progress.connection, end_time = None)[0]
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
+    print 'Will location work with %s', loc, '?'
     if not loc: return False
+    print loc, loc.type, loc.type.stub
     return loc.type.stub == 'district'
   except IndexError:
     pass
