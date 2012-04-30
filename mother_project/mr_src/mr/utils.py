@@ -101,8 +101,7 @@ def check_for_validity(progress):
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
     if not loc: return False
-    print '%s %s' % (loc.type, type(loc.type))
-    return loc.type == 'district'
+    return loc.type.name == 'district'
   except IndexError:
     pass
   return False
