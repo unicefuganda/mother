@@ -96,8 +96,6 @@ def mr_autoreg(**kwargs):
         questionnaire.save()
 
 def check_for_validity(progress):
-  step    = progress.script.steps.get(poll__name = 'mrs_location')
-  print 'Will step: ', step
   try:
     session       = ScriptSession.objects.filter(script = progress.script, connection = progress.connection, end_time = None)[0]
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
@@ -112,7 +110,7 @@ def check_for_validity(progress):
 
 def validate_district(sender, **kwargs):
   thepoll = sender.step.poll
-  if not thepoll or thepoll.name != 'mrs_location':
+  if not thepoll or thepoll.name != 'mrs_location_corrector':
     return
   if not check_for_validity(sender):
     return
