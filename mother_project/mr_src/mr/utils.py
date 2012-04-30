@@ -101,12 +101,15 @@ def check_for_validity(progress):
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
     if not loc: return False
+    print 'check_for_validity', ('got location: %s' % loc)
     return loc.type.stub == 'district'
   except IndexError:
+    print 'check_for_validity', sys.exc_info()
     pass
   return False
 
 def validate_district(sender, **kwargs):
+  print 'validate_district', sender, kwargs
   try:
     if sender.script.slug != 'mrs_location':
       return
@@ -168,7 +171,7 @@ def init_autoreg(sender, **kwargs):
         order=0,
         rule=ScriptStep.WAIT_MOVEON,
         start_offset=0,
-        giveup_offset=120,
+        giveup_offset=60,
     ))
     script.steps.add(ScriptStep.objects.create(
         script=script,
