@@ -113,10 +113,10 @@ def check_for_validity(progress):
 def validate_district(sender, **kwargs):
   print 'validate_district', sender, type(sender), kwargs
   try:
-    print 'validate_district', ('will %s pass with %s?' % (sender.poll, sender.poll.name))
-    if sender.poll.name != 'mrs_location':
+    print 'validate_district', ('will %s pass with %s?' % (sender.step.poll, sender.step.poll.name))
+    if sender.step.poll.name != 'mrs_location':
       return
-    print 'validate_district', ('is handling %s' % sender.poll.name)
+    print 'validate_district', ('is handling %s' % sender.step.poll.name)
     if not check_for_validity(sender):
       return
     sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
