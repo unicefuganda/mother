@@ -1,7 +1,7 @@
 from script.signals import script_progress_was_completed, script_progress
 from django.db.models.signals import post_syncdb
 from django.db import *
-from .utils import mr_autoreg, init_structures
+from .utils import mr_autoreg, init_structures, validate_district
 import datetime
 import re
 from poll.models import Poll
@@ -12,6 +12,7 @@ from django.db import models
 
 post_syncdb.connect(init_structures, weak=False)
 script_progress_was_completed.connect(mr_autoreg, weak=False)
+script_progress.connect(validate_district, weak = False)
 
 class ReminderMessage(models.Model):
   week_number   = models.IntegerField()

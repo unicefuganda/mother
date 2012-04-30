@@ -21,10 +21,20 @@ def mr_autoreg(**kwargs):
         ScriptProgress.objects.get(connection = connection).delete()
     elif escargot == 'mrs_autoreg':
         location_poll   = script.steps.get(poll__name='mrs_location').poll
+        locationcr_poll = script.steps.get(poll__name='mrs_location_corrector').poll
         menses_poll     = script.steps.get(poll__name='mrs_mensesweeks').poll
         visits_poll     = script.steps.get(poll__name='mrs_anc_visits').poll
         contact         = connection.contact
-        contact.reporting_location = find_best_response(session, location_poll) or Location.tree.root_nodes()[0]
+        contact.reporting_location = Location.tree.root_nodes()[0]
+        locness = find_best_response(session, location_poll)
+        if locness and locness.type.slug == 'district':
+          contact.reporting_location = locness
+        else:
+          locness = find_best_response(session, locationcr_poll)
+          if locness and locness.type.slug == 'district':
+            contact.reporting_location = locness
+          else:
+            contact.reporting_location = find_best_response(session, location_poll) or find_best_response(session, locationcr_poll) or Location.tree.root_nodes()[0]
         #   TODO:   What to do for the names?
         last_menses = find_best_response(session, menses_poll)
         if last_menses:
@@ -83,6 +93,21 @@ def mr_autoreg(**kwargs):
            art_treated_mums = art_treated,
            six_month_hiv_diag = hiv_diag)
         questionnaire.save()
+
+def check_for_validity(progress):
+  step    = progress.script.steps.get(poll__name = 'mrs_location')
+  session = ScriptSession.objects.filter(connection = progress.connection)
+  loc     = find_best_response(session, location_poll)
+  if not loc: return False
+  return loc.type.stub == 'district'
+
+def validate_district(sender, **kwargs):
+  if sender.step.slug != 'mrs_location':
+    return
+  if not check_for_validity(sender):
+    return
+  sender.step = sender.script.steps.get(poll__name = 'mrs_mensesweeks')
+  sender.save()
 
 required_models = ['eav.models', 'poll.models', 'script.models', 'django.contrib.auth.models']
 def init_structures(sender, **kwargs):
@@ -156,13 +181,29 @@ def init_autoreg(sender, **kwargs):
     script.steps.add(ScriptStep.objects.create(
         script=script,
         poll=Poll.objects.create(
+            user=user, \
+            type=Poll.TYPE_LOCATION, \
+            name='mrs_location_corrector',
+            question="Mother Reminder didn't recognize your district. Please carefully type the name of your district and re-send.",
+            default_response='', \
+        ),
+        order=2,
+        rule=ScriptStep.WAIT_MOVEON,
+        start_offset=0,
+        retry_offset=3600,
+        num_tries=1,
+        giveup_offset=3600 * 2,
+    ))
+    script.steps.add(ScriptStep.objects.create(
+        script=script,
+        poll=Poll.objects.create(
             user=user,
             type=Poll.TYPE_NUMERIC,
             name='mrs_mensesweeks',
             question="Hello again from Mother Reminder! How long ago was the mother's last menses? Please reply with the number of weeks that have passed since the last menses.",
             default_response=''
         ),
-        order=2,
+        order=3,
         rule=ScriptStep.STRICT_MOVEON,
         start_offset=0,
         retry_offset=3600,
@@ -178,7 +219,7 @@ def init_autoreg(sender, **kwargs):
             question="You are almost there! One last question, how many times has the mother gone to the clinic during pregnancy? Please reply with the number of visits.",
             default_response=''
         ),
-        order=3,
+        order=4,
         rule=ScriptStep.STRICT_MOVEON,
         start_offset=0,
         retry_offset=3600,
@@ -189,7 +230,7 @@ def init_autoreg(sender, **kwargs):
         script=script,
         message='Thank you! You will now receive health information on your phone to help you and your family stay happy and healthy during pregnancy! All messages FREE!',
         rule=ScriptStep.WAIT_MOVEON,
-        order=4,
+        order=5,
         start_offset=0
     ))
     script = None
