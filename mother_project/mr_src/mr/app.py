@@ -50,10 +50,13 @@ class App (AppBase):
                     script = Script.objects.get(slug = escargot),
                 connection = message.connection)
             return False
-        elif match and escargot == 'mrs_autoreg':
-          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You are already registered with Mother Reminder and will receive free health info.  Reply with STOP to leave Mother Reminder. Re-join by sending JOIN to 6400.")
-          msg.save()
-        else:
-          msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You just contacted Mother Reminder. Did you know that pregnant women should go to the health clinic 4 times during preganancy? Stay Healthy!")
-          msg.save()
+        else
+          if ScriptProgress.objects.filter(connection = message.connection):
+            return False
+          if match and escargot == 'mrs_autoreg':
+            msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You are already registered with Mother Reminder and will receive free health info.  Reply with STOP to leave Mother Reminder. Re-join by sending JOIN to 6400.")
+            msg.save()
+          else:
+            msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You just contacted Mother Reminder. Did you know that pregnant women should go to the health clinic 4 times during preganancy? Stay Healthy!")
+            msg.save()
         return False
