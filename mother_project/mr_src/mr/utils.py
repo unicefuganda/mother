@@ -98,10 +98,10 @@ def mr_autoreg(**kwargs):
 def check_for_validity(progress):
   step    = progress.script.steps.get(poll__name = 'mrs_location')
   try:
-    session       = ScriptSession.objects.filter(connection = progress.connection, end_time = None)[0]
+    session       = ScriptSession.objects.filter(script = progress.script, connection = progress.connection, end_time = None)[0]
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
-    print 'Will location work with %s', loc, '?'
+    print 'Will location work with ', loc, '?'
     if not loc: return False
     print loc, loc.type, loc.type.stub
     return loc.type.stub == 'district'
