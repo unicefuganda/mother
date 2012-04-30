@@ -330,4 +330,5 @@ def throw_down_scripts():
     ScriptProgress.objects.all().delete()
     ScriptStep.objects.all().delete()
     Script.objects.all().delete()
+    Poll.objects.all().delete()
     transaction.commit()
