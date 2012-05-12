@@ -7,13 +7,6 @@ from datetime import datetime, timedelta
 import re
 
 class App (AppBase):
-    def parse (self, message):
-        for keywd in settings.KEYWORDS_AND_SLUGS:
-            match = re.match(keywd, message.text)
-            if match:
-                if getattr(message, 'db_message', None):
-                    message.db_message.text = message.text[len(match.group(0)):]
-                    message.db_message.save()
 
     def handle (self, message):
         escargot = 'mrs_autoreg'
