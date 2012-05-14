@@ -14,14 +14,25 @@ from mr.models import ReminderMessage
 from script.models import ScriptProgress, Script
 
 class Command(BaseCommand):
-  def handle(self, **options):
-    outmsgs = ReminderMessage.as_hash().keys()
-    outmsgs.sort()
-    try:
-      lastweek  = outmsgs[-1]
-      for mother in Contact.objects.filter(interested = True, last_menses__lt = (datetime.now() - timedelta(weeks = lastweek))).exclude(connection = None):
-        msg = Message.objects.create(connection = mother.default_connection, direction = 'O', status = 'Q', text = 'If you want to stop receiving FREE messages from Mother Reminder please reply with STOP.')
-        # msg.save()
-        # application, batch, connection, date, direction, flags, id, in_response_to, poll, poll_responses, priority, responses, status, submissions, text
-    except IndexError:
-      pass
+    def handle(self, **options):
+        outmsgs = ReminderMessage.as_hash().keys()
+        outmsgs.sort()
+        try:
+            lastweek = outmsgs[-1]
+
+            for mother in Contact.objects.filter(interested=True,
+                last_menses__lt=(datetime.now() - timedelta(weeks=lastweek))).exclude(connection=None):
+                text = 'If you want to stop receiving FREE messages from Mother Reminder please reply with STOP.'
+                last_optout = Message.objects.filter(connection=mother.default_connection).filter(text=text).order_by('-date')
+                if not last_optout:
+                    msg = Message.objects.create(connection=mother.default_connection, direction='O', status='Q',
+                        text=text)
+                else:
+                    if last_optout[0].date + timedelta(weeks=8) <= datetime.now():
+                        msg = Message.objects.create(connection=mother.default_connection, direction='O', status='Q',
+                            text=text)
+
+                        # msg.save()
+                        # application, batch, connection, date, direction, flags, id, in_response_to, poll, poll_responses, priority, responses, status, submissions, text
+        except IndexError:
+            pass

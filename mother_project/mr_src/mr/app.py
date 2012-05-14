@@ -17,7 +17,7 @@ class App (AppBase):
             if match:
                 escargot     = settings.KEYWORDS_AND_SLUGS[keywd]
                 matched      = message.text[len(match.group(0)):]
-                message.text = matched
+                #message.text = matched
                 break
         if escargot == 'mrs_opt_out':
           if not message.connection.contact:
