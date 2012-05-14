@@ -55,7 +55,7 @@ def mr_autoreg(**kwargs):
         try:
             place = find_best_response(session, district_poll)
             if not place: [][0]
-            matching = Location.objects.filter(name = place)[0]
+            matching = Location.objects.filter(name__icontains = place)[0]
             contact.reporting_location = matching
         except IndexError:
             contact.reporting_location = Location.tree.root_nodes[0]
