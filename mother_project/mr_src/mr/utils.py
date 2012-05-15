@@ -55,7 +55,7 @@ def mr_autoreg(**kwargs):
         try:
             place = find_best_response(session, district_poll)
             if not place: [][0]
-            matching = Location.objects.filter(name__icontains = place)[0]
+            matching = Location.objects.filter(name__icontains = place,type="district")[0]
             contact.reporting_location = matching
         except IndexError:
             contact.reporting_location = Location.tree.root_nodes[0]
@@ -98,10 +98,20 @@ def mr_autoreg(**kwargs):
 def check_for_validity(progress):
   try:
     session       = ScriptSession.objects.filter(script = progress.script, connection = progress.connection, end_time = None)[0]
+
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
-    if not loc: return False
-    return loc.type.name == 'district'
+    if not loc:
+        return False
+    elif  not loc.type == 'district':
+        #find best response is not guaranteed to return a district in case name crashes
+        dist_loc=loc.get_ancestors().filter(type="district")
+        if dist_loc.exists():
+            eav_obj=session.responses.filter(response__poll=location_poll).latest('response__date').response.eav
+            eav_obj.poll_location_value=dist_loc[0]
+            eav_obj.save()
+            return True
+    return loc.type == 'district'
   except IndexError:
     pass
   return False
