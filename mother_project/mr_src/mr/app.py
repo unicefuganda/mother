@@ -36,20 +36,24 @@ class App (AppBase):
           msg.save()
           return False
         if (not message.connection.contact) and (not ScriptProgress.objects.filter(connection = message.connection)):
-            message.connection.contact = Contact.objects.create(name='Anonymous User')
-            message.connection.contact.interested  = True
-            message.connection.contact.last_menses = datetime.now() - timedelta(days = 45)
-            message.connection.contact.save()
-            message.connection.save()
-            ScriptProgress.objects.create(
-                    script = Script.objects.get(slug = escargot),
-                connection = message.connection)
+            if match:
+                message.connection.contact = Contact.objects.create(name='Anonymous User')
+                message.connection.contact.interested  = True
+                message.connection.contact.last_menses = datetime.now() - timedelta(days = 45)
+                message.connection.contact.save()
+                message.connection.save()
+                ScriptProgress.objects.create(
+                        script = Script.objects.get(slug = escargot),
+                    connection = message.connection)
+            else:
+                msg =  Message(connection = message.connection, status = 'Q', direction = 'O', text = "You just contacted Mother Reminder. Did you know that pregnant women should go to the health clinic 4 times during preganancy? Stay Healthy!")
+                msg.save()
             return False
         else:
           if ScriptProgress.objects.filter(connection = message.connection):
             return False
           if match and escargot == 'mrs_autoreg':
-            msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You are already registered with Mother Reminder and will receive free health info.  Reply with STOP to leave Mother Reminder. Re-join by sending JOIN to 6400.")
+            msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You just contacted Mother Reminder. Did you know that pregnant women should go to the health clinic 4 times during preganancy? Stay Healthy!")
             msg.save()
           else:
             msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = "You just contacted Mother Reminder. Did you know that pregnant women should go to the health clinic 4 times during preganancy? Stay Healthy!")
