@@ -35,7 +35,6 @@ class App (AppBase):
           msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.')
           msg.save()
           return False
-        import  pdb;pdb.set_trace()
         if (not message.connection.contact) and (not ScriptProgress.objects.filter(connection = message.connection)):
             message.connection.contact = Contact.objects.create(name='Anonymous User')
             message.connection.contact.interested  = True
