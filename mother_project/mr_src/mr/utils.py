@@ -20,6 +20,8 @@ def mr_autoreg(**kwargs):
 
     if escargot == 'mrs_opt_out':
         ScriptProgress.objects.get(connection = connection).delete()
+        connection.delete()
+        Connection.objects.get(pk=connection.pk).delete()
     elif escargot == 'mrs_autoreg':
         location_poll   = script.steps.get(poll__name='mrs_location').poll
         locationcr_poll = script.steps.get(poll__name='mrs_location_corrector').poll

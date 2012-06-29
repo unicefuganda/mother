@@ -29,9 +29,9 @@ class App (AppBase):
           sps.delete()
           message.connection.contact.interested = False
           message.connection.contact.save()
-          # ScriptProgress.objects.create(
-          #     script = Script.objects.get(slug = escargot),
-          # connection = message.connection)
+          ScriptProgress.objects.create(
+               script = Script.objects.get(slug = escargot),
+           connection = message.connection)
           msg = Message(connection = message.connection, status = 'Q', direction = 'O', text = 'You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.')
           msg.save()
           return False
