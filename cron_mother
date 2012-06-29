@@ -1,4 +1,4 @@
-* * * * * root /var/www/env/prod/bin/python /var/www/prod/mother/mother_project/manage.py check_script_progress -e 7 -l 20
+* * * * * root /var/www/env/prod/bin/python /var/www/prod/mother/mother_project/manage.py check_script_progress -e 0 -l 23
 15 13 * * * root /var/www/env/prod/bin/python /var/www/prod/mother/mother_project/manage.py remind_mothers
 15 13 * * * root /var/www/env/prod/bin/python /var/www/prod/mother/mother_project/manage.py invite_opt_out
 
