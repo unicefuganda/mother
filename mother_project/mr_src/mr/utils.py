@@ -5,11 +5,19 @@ from django.db import transaction
 from poll.models import Poll
 from script.models import Script, ScriptStep, ScriptSession, ScriptProgress
 from script.utils.handling import find_best_response, find_closest_match
-from rapidsms.models import Contact
-from rapidsms.contrib.locations.models import Location
+from rapidsms.models import Contact, Connection
+from rapidsms.contrib.locations.models import Location, LocationType
 from datetime import *
 from healthmodels.models import HealthProvider, HealthFacility
 import sys
+
+def ascending_location_types(them = []):
+  if not them:
+    return ascending_location_types([Location.tree.root_nodes()[0].type])
+  ndem  = Location.objects.filter(parent_type = them[-1])
+  for it in ndem:
+    return ascending_location_types(them + [it.type])
+  return them
 
 def mr_autoreg(**kwargs):
     connection = kwargs['connection']
@@ -19,9 +27,10 @@ def mr_autoreg(**kwargs):
     script = progress.script
 
     if escargot == 'mrs_opt_out':
-        ScriptProgress.objects.get(connection = connection).delete()
-        connection.delete()
-        Connection.objects.get(pk=connection.pk).delete()
+        # ScriptProgress.objects.get(connection = connection).delete()
+        # connection.delete()
+        # Connection.objects.get(pk=connection.pk).delete()
+        pass
     elif escargot == 'mrs_autoreg':
         location_poll   = script.steps.get(poll__name='mrs_location').poll
         locationcr_poll = script.steps.get(poll__name='mrs_location_corrector').poll
@@ -100,12 +109,11 @@ def mr_autoreg(**kwargs):
 def check_for_validity(progress):
   try:
     session       = ScriptSession.objects.filter(script = progress.script, connection = progress.connection, end_time = None)[0]
-
     location_poll = progress.script.steps.get(poll__name='mrs_location').poll
     loc           = find_best_response(session, location_poll)
     if not loc:
         return False
-    elif  not loc.type == 'district':
+    elif loc.type.name != 'district':
         #find best response is not guaranteed to return a district in case name crashes
         dist_loc=loc.get_ancestors().filter(type="district")
         if dist_loc.exists():
@@ -113,7 +121,7 @@ def check_for_validity(progress):
             eav_obj.poll_location_value=dist_loc[0]
             eav_obj.save()
             return True
-    return loc.type == 'district'
+    return loc.type.name  == 'district'
   except IndexError:
     pass
   return False
@@ -146,16 +154,16 @@ def init_autoreg(sender, **kwargs):
         script.delete()
     except Script.DoesNotExist:
         pass
-    script = Script.objects.create(slug =   'mrs_opt_out',
-                                   name = "General opt-out script")
-    script.steps.add(ScriptStep.objects.create(
-        script=script,
-        message="You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.",
-        order=0,
-        rule=ScriptStep.WAIT_MOVEON,
-        start_offset=0,
-        giveup_offset=60,
-    ))
+    # script = Script.objects.create(slug =   'mrs_opt_out',
+    #                                name = "General opt-out script")
+    # script.steps.add(ScriptStep.objects.create(
+    #     script=script,
+    #     message="You will no longer receive FREE messages from Mother Reminder. If you want to join again please send JOIN to 6400.",
+    #     order=0,
+    #     rule=ScriptStep.WAIT_MOVEON,
+    #     start_offset=0,
+    #     giveup_offset=60,
+    # ))
     script = None
     try:
         script  =   Script.objects.get(slug = 'mrs_autoreg')
@@ -167,24 +175,18 @@ def init_autoreg(sender, **kwargs):
     user, created = User.objects.get_or_create(username="admin")
     location_poll = Poll.objects.create
     script.steps.add(ScriptStep.objects.create(
-        script=script,
-        poll=Poll.objects.create(
-            user=user, \
-            type=Poll.TYPE_LOCATION, \
-            name='mrs_intro',
-            question="Thank you for joining Mother Reminder - a great way for fathers and mothers to get the information they need to have a healthy baby. All messages FREE!",
-            default_response='', \
-        ),
-        order=0,
-        rule=ScriptStep.WAIT_MOVEON,
-        start_offset=0,
-        giveup_offset=60,
+        script  = script,
+        message = "Thank you for joining Mother Reminder - a great way for fathers and mothers to get the information they need to have a healthy baby. All messages FREE!",
+        order   = 0,
+        rule    = ScriptStep.WAIT_MOVEON,
+        start_offset  = 0,
+        giveup_offset = 60,
     ))
     script.steps.add(ScriptStep.objects.create(
         script=script,
         poll=Poll.objects.create(
             user=user, \
-            type=Poll.TYPE_LOCATION, \
+            type=Poll.TYPE_LOCATION_DISTRICT, \
             name='mrs_location',
             question="Time to answer a few questions from Mother Reminder! Your response is FREE! From which district are you? Please reply with the name of your district only.",
             default_response='', \
