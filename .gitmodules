@@ -1,33 +1,33 @@
 [submodule "mother_project/rapidsms"]
 	path = mother_project/rapidsms
-	url = git://github.com/unicefuganda/rapidsms
+	url = git://github.com/revence27/rapidsms
 [submodule "mother_project/django_eav"]
 	path = mother_project/django_eav
-	url = git://github.com/unicefuganda/django-eav
+	url = git://github.com/revence27/django-eav
 [submodule "mother_project/rapidsms_healthmodels"]
 	path = mother_project/rapidsms_healthmodels
-	url = git://github.com/unicefuganda/rapidsms-healthmodels
+	url = git://github.com/revence27/rapidsms-healthmodels
 [submodule "mother_project/rapidsms_contact"]
 	path = mother_project/rapidsms_contact
-	url = git://github.com/unicefuganda/rapidsms-contact
+	url = git://github.com/revence27/rapidsms-contact
 [submodule "mother_project/rapidsms_generic"]
 	path = mother_project/rapidsms_generic
-	url = git://github.com/unicefuganda/rapidsms-generic
+	url = git://github.com/revence27/rapidsms-generic
 [submodule "mother_project/rapidsms_httprouter_src"]
 	path = mother_project/rapidsms_httprouter_src
-	url = git://github.com/unicefuganda/rapidsms-httprouter
+	url = git://github.com/revence27/rapidsms-httprouter
 [submodule "mother_project/rapidsms_polls"]
 	path = mother_project/rapidsms_polls
-	url = git://github.com/unicefuganda/rapidsms-polls
+	url = git://github.com/revence27/rapidsms-polls
 [submodule "mother_project/rapidsms_script"]
 	path = mother_project/rapidsms_script
-	url = git://github.com/unicefuganda/rapidsms-script
+	url = git://github.com/revence27/rapidsms-script
 [submodule "mother_project/rapidsms_uganda_common"]
 	path = mother_project/rapidsms_uganda_common
-	url = git://github.com/unicefuganda/rapidsms-uganda-common
+	url = git://github.com/revence27/rapidsms-uganda-common
 [submodule "mother_project/rapidsms_xforms_src"]
 	path = mother_project/rapidsms_xforms_src
-	url = git://github.com/unicefuganda/rapidsms-xforms
+	url = git://github.com/revence27/rapidsms-xforms
 [submodule "mother_project/rapidsms_unregister"]
 	path = mother_project/rapidsms_unregister
-	url = https://github.com/unicefuganda/rapidsms-unregister.git
+	url = https://github.com/revence27/rapidsms-unregister.git
