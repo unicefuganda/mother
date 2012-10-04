@@ -1,3 +1,8 @@
+Good location matching.
+Kind time.
+
+---------
+
 Wording for registration and welcome have been updated to make them gender neutral and use “Mother Reminder” rather than “Healthy Mothers Group.” See excel spreadsheet.
 
 Added clarification question if district cannot be matched by system.
